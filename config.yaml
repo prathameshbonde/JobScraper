@@ -1,0 +1,33 @@
+schedule:
+  hour: 10
+  minute: 0
+
+filters:
+  job_titles:
+    - "Software Engineer 2"
+    - "Software Engineer II"
+  location: "Bangalore"
+  max_days_old: 7
+
+portals:
+  - name: "microsoft"
+    enabled: true
+    auth:
+      type: "none"   # No auth needed for browsing jobs
+    pagination:
+      max_pages: 10
+
+email:
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+  sender_email: "prathameshbonde32@gmail.com"
+  recipients:
+    - "prathameshbonde32@gmail.com"
+  subject_prefix: "[JobScraper]"
+  send_empty_report: false
+
+general:
+  headless: true
+  timeout: 30000
+  db_path: "jobs.db"
+  log_level: "INFO"

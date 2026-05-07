@@ -1,0 +1,53 @@
+name: Daily Job Scrape
+
+on:
+  schedule:
+    # Runs at 10:00 AM UTC every day
+    - cron: '0 10 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+permissions:
+  contents: write # Needed to commit and push changes back to the repo
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run Job Scraper
+        env:
+          SMTP_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          # Add any other required secrets here
+        run: |
+          python main.py --run-now
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Add database and logs
+          git add jobs.db logs/ || echo "Failed to add files, maybe they don't exist yet"
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No new changes to commit."
+          else
+            git commit -m "chore(auto): update jobs database and logs [skip ci]"
+            git push
+          fi

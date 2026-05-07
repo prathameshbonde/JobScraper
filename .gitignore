@@ -2,7 +2,6 @@
 .env
 .env.local
 .env.*.local
-config.yaml
 config.local.yaml
 
 # Authentication and credentials
@@ -11,10 +10,7 @@ auth/
 *.pem
 *.p12
 
-# Database files
-*.db
-*.sqlite
-*.sqlite3
+
 
 # Logs
 logs/

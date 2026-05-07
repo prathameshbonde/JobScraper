@@ -1,0 +1,44 @@
+name: "Microsoft"
+base_url: "https://microsoft.eightfold.ai"
+
+# URL template for job search
+# {query} will be replaced with the job title keyword
+# sort_by=timestamp ensures newest jobs appear first
+search_url_template: "https://microsoft.eightfold.ai/careers?domain=microsoft.com&query={query}&location={location}&sort_by=timestamp"
+
+# CSS selectors for scraping job cards
+selectors:
+  # Container holding all job cards
+  job_list: "div[class*='cardlist']"
+
+  # Individual job card link
+  job_card: "a[class*='card-'][id^='job-card-']"
+
+  # Job title — use aria-label attribute on the card itself
+  # Format: "View job: <title>"
+  job_title_attribute: "aria-label"
+  job_title_prefix: "View job: "
+
+  # Location — second div group within the card
+  job_location: "a[class*='card-'] > div > div:nth-child(2) div:nth-child(2)"
+
+  # Posted date — last div in the card's main content area
+  job_date: "a[class*='card-'] > div > div:last-child"
+
+  # Job ID — extracted from the card's id attribute
+  # Pattern: job-card-{ID}-job-list
+  job_id_attribute: "id"
+  job_id_regex: "job-card-(\\d+)-job-list"
+
+  # Job URL — href attribute on the card
+  job_url_attribute: "href"
+
+  # Pagination
+  next_button: "button[aria-label='Next jobs']"
+  page_indicator: "[class*='pagination']"
+
+# Date format used by this portal
+date_format: "relative"   # Dates are like "Posted 12 hours ago"
+
+# Jobs per page (used for estimating total pages)
+jobs_per_page: 10
