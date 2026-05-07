@@ -1,0 +1,4 @@
+2026-04-27 08:05:20 [INFO] __main__: Log file: logs\scrape_20260427_080520.log
+2026-04-27 08:05:20 [INFO] storage.db: Connected to database: jobs.db
+2026-04-27 08:05:22 [INFO] storage.db: Cleared all job records from the database
+2026-04-27 08:05:22 [INFO] storage.db: Database connection closed

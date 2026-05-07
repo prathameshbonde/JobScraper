@@ -1,0 +1,4 @@
+2026-05-07 10:33:01 [INFO] __main__: Log file: logs\scrape_20260507_103301.log
+2026-05-07 10:33:05 [INFO] notifier.email_sender: Email sent to ['prathameshbonde32@gmail.com']
+2026-05-07 10:33:05 [INFO] notifier.email_sender: Test email sent successfully!
+2026-05-07 10:33:05 [INFO] __main__: Test email sent! Check your inbox.

@@ -21,6 +21,7 @@ import os
 import asyncio
 import argparse
 import logging
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import yaml
@@ -51,8 +52,6 @@ def setup_logging(level: str = "INFO"):
     console_handler.setFormatter(formatter)
 
     # File handler (rotating by date would be nice, but keep it simple)
-    from datetime import datetime
-
     log_file = log_dir / f"scrape_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
     file_handler = logging.FileHandler(log_file, encoding="utf-8")
     file_handler.setFormatter(formatter)
@@ -64,6 +63,25 @@ def setup_logging(level: str = "INFO"):
     root_logger.addHandler(file_handler)
 
     return log_file
+
+
+def cleanup_old_logs(days: int = 5):
+    """Delete old scrape log files that are older than the given number of days."""
+    log_dir = Path("logs")
+    if not log_dir.exists():
+        return
+
+    cutoff = datetime.now() - timedelta(days=days)
+    logger = logging.getLogger(__name__)
+    logger.info(f"Cleaning up log files older than {days} days...")
+
+    for path in log_dir.glob("scrape_*.log"):
+        try:
+            if path.is_file() and datetime.fromtimestamp(path.stat().st_mtime) < cutoff:
+                path.unlink()
+                logger.info(f"Deleted old log file: {path.name}")
+        except Exception as e:
+            logger.warning(f"Could not delete old log file '{path.name}': {e}")
 
 
 def load_config(config_path: str = "config.yaml") -> dict:
@@ -148,6 +166,7 @@ async def cmd_run_now(config: dict, dry_run: bool, headful: bool):
     """Execute a single scrape run."""
     logger = logging.getLogger(__name__)
     logger.info("Starting scrape run...")
+    cleanup_old_logs()
 
     jobs = await run_scrape(config, dry_run=dry_run, headful=headful)
 
@@ -223,6 +242,7 @@ def cmd_scheduler(config: dict, dry_run: bool, headful: bool):
 
     def scheduled_run():
         """Wrapper to run async scrape from sync scheduler."""
+        cleanup_old_logs()
         asyncio.run(run_scrape(config, dry_run=dry_run, headful=headful))
 
     scheduler.add_job(

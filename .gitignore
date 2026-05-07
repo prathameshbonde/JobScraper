@@ -13,8 +13,8 @@ auth/
 
 
 # Logs
-logs/
-*.log
+# logs/
+# *.log
 
 # Python
 __pycache__/
