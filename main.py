@@ -77,9 +77,18 @@ def cleanup_old_logs(days: int = 5):
 
     for path in log_dir.glob("scrape_*.log"):
         try:
-            if path.is_file() and datetime.fromtimestamp(path.stat().st_mtime) < cutoff:
-                path.unlink()
-                logger.info(f"Deleted old log file: {path.name}")
+            if path.is_file():
+                try:
+                    # Extract datetime from filename (scrape_YYYYMMDD_HHMMSS.log)
+                    date_str = path.stem.replace("scrape_", "")
+                    log_date = datetime.strptime(date_str, "%Y%m%d_%H%M%S")
+                except ValueError:
+                    # Fallback to modification time
+                    log_date = datetime.fromtimestamp(path.stat().st_mtime)
+
+                if log_date < cutoff:
+                    path.unlink()
+                    logger.info(f"Deleted old log file: {path.name}")
         except Exception as e:
             logger.warning(f"Could not delete old log file '{path.name}': {e}")
 
