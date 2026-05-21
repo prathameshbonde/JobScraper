@@ -145,7 +145,7 @@ class EmailSender:
         password = os.getenv("SMTP_PASSWORD")
 
         if not username or not password:
-            logger.error("SMTP_USERNAME and SMTP_PASSWORD must be set in .env file")
+            logger.error("SMTP_USERNAME and SMTP_PASSWORD must be set as environment variables or in a .env file")
             raise ValueError("Missing SMTP credentials in environment variables")
 
         msg = MIMEMultipart("alternative")

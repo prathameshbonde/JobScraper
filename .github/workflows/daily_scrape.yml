@@ -32,6 +32,7 @@ jobs:
       - name: Run Job Scraper
         env:
           SMTP_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          SMTP_USERNAME: ${{ secrets.EMAIL_USERNAME }}
           # Add any other required secrets here
         run: |
           python main.py --run-now
