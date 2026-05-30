@@ -1,131 +1,169 @@
-# JobScraper 🔍
+# Automated Job Search & AI Resume Tailoring Pipeline
 
-A Python application that automatically scrapes career portals daily, deduplicates job listings, and sends you email notifications with new postings.
+A cost-efficient, fully automated, serverless pipeline running entirely on GitHub Actions. It scrapes daily job postings across LinkedIn, Indeed, and Glassdoor, deduplicates them using a git-backed local state database, uses Google Gemini 2.0 Flash to tailor your resume summary and experience bullet points for specific matches, compiles the customized LaTeX resumes into high-quality PDFs, and emails a daily digest directly to your inbox with the PDFs attached.
 
-## Features
+---
 
-- **Multi-Portal Support** — Plugin architecture with per-portal login/search/scrape logic
-- **Daily Scheduling** — Windows Task Scheduler (primary) or APScheduler (fallback)
-- **Smart Deduplication** — SQLite-based tracking prevents duplicate notifications
-- **Configurable Filters** — Job title keywords, max days old, portal-specific settings
-- **Email Notifications** — Beautiful HTML emails with jobs grouped by portal
-- **Flexible Auth** — Supports OAuth, credential-based, or no-auth portals
-- **Headless/Headful Toggle** — Debug by watching the browser work
+## 🛠️ Architecture & Data Flow
 
-## Quick Start
+```
+       [1. GitHub Actions (Cron Trigger)]
+                       │
+                       ▼
+         [2. Ingestion (python-jobspy)]  ──(Scrapes LinkedIn, Indeed, Glassdoor)
+                       │
+                       ▼
+     [3. Deduplication (Local JSON State)]  ──(Filters against processed_jobs.json)
+                       │
+                       ▼
+       [4. Tailor (Gemini 2.0 Flash)]   ──(Updates Summary & Bullet Points)
+                       │
+                       ▼
+         [5. Compile (TeX Live Runner)]  ──(Generates ready-to-use PDFs)
+                       │
+                       ▼
+          [6. Dispatch (Secure SMTP)]    ──(HTML Digest with PDF Attachments)
+                       │
+                       ▼
+        [7. Commit (Git Auto-Commit)]    ──(Saves new keys in processed_jobs.json)
+```
 
-### 1. Install Dependencies
+---
+
+## 📂 Project Structure
+
+```
+├── .github/workflows/
+│   └── daily_agent.yml        # GitHub Actions Cron Configuration
+├── prompts/
+│   ├── summary_prompt.md      # Professional Summary AI System Prompts
+│   └── experience_prompt.md   # Experience Bullet Points AI System Prompts
+├── config.yaml                # Job Search & SMTP Configuration File
+├── processed_jobs.json        # Deduplication Database State File
+├── resume.tex                 # Master LaTeX Resume Template
+├── scraper.py                 # Jobspy Scraping & State Filter Logic
+├── rewriter.py                # Gemini API Structured Tailoring Logic
+├── compiler.py                # Automated Local LaTeX Compiling Routine
+├── notifier.py                # Email Digest Creation & SMTP Dispatcher
+├── main.py                    # Orchestration Execution Controller
+├── test_pipeline.py           # Local Validation & Parsing Unit Tests
+└── requirements.txt           # Python Package Dependencies
+```
+
+---
+
+## ⚙️ Configuration Setup (`config.yaml`)
+
+Search parameters and limits are externalized in `config.yaml` at the root of the repository:
+
+```yaml
+search_parameters:
+  titles:
+    - "Software Engineer"
+    - "Backend Engineer"
+    - "Generative AI Engineer"
+    - "Java Developer"
+  locations:
+    - "Bengaluru"
+  country: "india"
+  results_wanted: 30
+  hours_old: 24
+  max_jobs_to_tailor: 5
+
+email_settings:
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+```
+
+---
+
+## 🏷️ LaTeX Resume Comment Tagging
+
+Annotate specific blocks in your master `resume.tex` file using targeted comments. The pipeline extracts only these sections, sends them to Gemini for keyword optimization, and replaces them—leaving the rest of the LaTeX layout 100% untouched and safe from compiler errors:
+
+```latex
+% %START_SUMMARY%
+Detail-oriented Software Engineer with a passion for building scalable systems.
+% %END_SUMMARY%
+
+...
+
+\section{Experience}
+% %START_EXPERIENCE_1%
+\begin{itemize}
+    \item Developed high-throughput API microservices using Python and Spring Boot.
+    \item Reduced database query latency by 35% through query optimization.
+\end{itemize}
+% %END_EXPERIENCE_1%
+```
+
+---
+
+## 📝 Customizing AI Prompts
+
+The system prompts (AI instructions) defining the tailoring logic have been externalized into clean markdown files inside the `prompts/` directory to separate code from AI engineering:
+
+* **[prompts/summary_prompt.md](file:///d:/Projects/JobWorkflow/prompts/summary_prompt.md)**: Manages how Gemini rewrites your **Professional Summary** to align with keywords and highlights matching the JD.
+* **[prompts/skills_prompt.md](file:///d:/Projects/JobWorkflow/prompts/skills_prompt.md)**: Manages how Gemini reorganizes and prioritizes your **Technical Skills list** to maximize keyword matching scores against ATS parsers.
+* **[prompts/experience_prompt.md](file:///d:/Projects/JobWorkflow/prompts/experience_prompt.md)**: Manages how Gemini tailors your **Work Experience bullet points** (keeping structural LaTeX commands like `\item` intact).
+
+*You can open, edit, and optimize these markdown files directly to adjust the AI's tone, rules, constraints, and behavior without ever touching the Python source code.*
+
+---
+
+## 🚀 Getting Started
+
+### 1. Local Run Requirements
+
+Ensure you have Python 3.10+ and a LaTeX environment installed locally (e.g., TeX Live or MiKTeX on your system PATH to run automated PDF compilation).
 
 ```bash
+# Clone the repository
+git clone <your-repository-url>
+cd <repository-directory>
+
+# Install dependencies
 pip install -r requirements.txt
-playwright install chromium
 ```
 
-### 2. Configure
+### 2. Configure Local Environment Variables
 
-Copy `.env.example` to `.env` and fill in your SMTP credentials:
-```bash
-copy .env.example .env
-```
-
-Edit `config.yaml` to set your:
-- Job title keywords
-- Max days old filter
-- Email recipients
-- Portal list
-
-### 3. Test Run
+To run the pipeline locally, define the following variables in your terminal or shell profile:
 
 ```bash
-# Dry run (scrape without emailing)
-python main.py --run-now --dry-run
-
-# With visible browser
-python main.py --run-now --dry-run --headful
-
-# Test email configuration
-python main.py --test-email
-
-# Full run (scrape + email)
-python main.py --run-now
-
-# Reset database (clear all scraped jobs)
-python main.py --reset-db
+export GEMINI_API_KEY="your-google-ai-studio-key"
+export RECEIVER_EMAIL="destination-email@example.com"
+export EMAIL_SENDER="sender-email@example.com"
+export SMTP_USER="your-smtp-username"
+export SMTP_PASSWORD="your-smtp-app-password"
 ```
 
-### 4. Schedule Daily Runs
+### 3. Run Pipeline Locally
 
 ```bash
-# Auto-create Windows Task Scheduler entry (run as admin)
-setup_scheduler.bat
+# Run unit tests to verify parsing & escaping
+python test_pipeline.py
 
-# OR use built-in scheduler (must keep running)
-python main.py --scheduler
+# Run the full pipeline
+python main.py
 ```
 
-## CLI Reference
+---
 
-| Command | Description |
-|---|---|
-| `--run-now` | Execute a single scrape cycle |
-| `--run-now --dry-run` | Scrape without sending email |
-| `--run-now --headful` | Run with visible browser |
-| `--test-email` | Send test email to verify SMTP |
-| `--setup-auth <portal>` | Manual OAuth login for a portal |
-| `--scheduler` | Start APScheduler (continuous) |
-| `--list-portals` | List available portal plugins |
-| `--reset-db` | Clear database of all scraped jobs |
-| `--config <path>` | Use custom config file |
+## ☁️ GitHub Actions Automated Deployment
 
-## Adding a New Portal
+1. Push this directory to your private GitHub repository.
+2. Navigate to your repository on GitHub, then click on **Settings > Secrets and variables > Actions > New repository secret**.
+3. Create the following Secrets:
 
-1. Create a new folder under `portals/`:
-   ```
-   portals/
-   └── myportal/
-       ├── __init__.py    # Portal class (implements PortalBase)
-       ├── config.yaml    # Portal-specific selectors & URLs
-       ├── login.py       # Authentication logic
-       ├── search.py      # Job search & filtering
-       └── scrape.py      # Job card extraction
-   ```
+| Secret Name | Description | Example / Default |
+| :--- | :--- | :--- |
+| `GEMINI_API_KEY` | Your Google AI Studio API key | `AIzaSy...` |
+| `RECEIVER_EMAIL` | The destination email for digests | `recipient@example.com` |
+| `EMAIL_SENDER` | The sending email address | `sender@example.com` |
+| `SMTP_USER` | SMTP authentication username | `sender@example.com` |
+| `SMTP_PASSWORD` | SMTP password / App Password | `abcd efgh ijkl mnop` |
+| `SMTP_SERVER` | SMTP host gateway address | `smtp.gmail.com` |
+| `SMTP_PORT` | SMTP port address | `587` |
 
-2. Implement the `PortalBase` interface in `__init__.py`
-3. Add the portal to `config.yaml`:
-   ```yaml
-   portals:
-     - name: "myportal"
-       enabled: true
-       auth:
-         type: "none"  # or "oauth" or "credentials"
-   ```
-
-## Project Structure
-
-```
-JobScrapper/
-├── main.py              # CLI entry point
-├── config.yaml          # Global configuration
-├── core/
-│   ├── browser.py       # Playwright browser management
-│   ├── orchestrator.py  # Main run orchestration
-│   └── date_parser.py   # Date parsing utilities
-├── portals/
-│   ├── base.py          # Abstract portal interface
-│   ├── loader.py        # Dynamic plugin loader
-│   └── microsoft/       # Microsoft portal plugin
-├── models/
-│   └── job.py           # Job data model
-├── storage/
-│   └── db.py            # SQLite dedup store
-├── notifier/
-│   └── email_sender.py  # SMTP email sender
-├── auth/                # Session storage (gitignored)
-└── logs/                # Run logs
-```
-
-## Currently Supported Portals
-
-| Portal | Auth Required | URL |
-|---|---|---|
-| Microsoft (eightfold.ai) | No | https://microsoft.eightfold.ai/careers |
+Once configured, GitHub Actions will run the pipeline automatically on the cron schedule (preconfigured for daily runs at 10:00 AM IST) and commit deduplication updates back to the branch.

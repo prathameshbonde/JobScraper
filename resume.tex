@@ -1,0 +1,124 @@
+\documentclass[10pt,a4paper,sans]{moderncv}
+\usepackage{lmodern}
+
+% ModernCV themes
+\moderncvstyle{banking} 
+\moderncvcolor{burgundy} 
+
+% Required moderncv data to prevent compilation errors
+\name{Prathamesh}{Bonde}
+\title{Software Engineer}
+
+% Adjust page margins - further tightened to ensure single page fit
+\usepackage[scale=0.94, top=0.7cm, bottom=0.7cm, left=1.0cm, right=1.0cm]{geometry}
+\usepackage[english]{babel}
+
+% Set default font to Sans Serif (commented out to avoid fontspec errors if Noto Sans is not installed)
+% \babelfont{rm}{Noto Sans}
+
+% Compressed list spacing
+\usepackage{enumitem}
+\setlist[itemize]{label=-, leftmargin=1.2em, nosep, topsep=1pt, partopsep=0pt, parsep=0pt, itemsep=1pt}
+
+\usepackage{titlesec}
+\usepackage{xcolor}
+
+% Color definitions
+\definecolor{primary}{RGB}{0, 51, 102}
+
+% Compact Section styling - Fixed \titlerule typo
+\titleformat{\section}{\large\bfseries\color{primary}\uppercase}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{8pt}{4pt}
+
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+% --- COMPACT HEADER ---
+% Note: Using manual header to maintain specific layout requested previously
+\begin{center}
+    {\Huge \bfseries \color{primary} PRATHAMESH BONDE} \\
+    \vspace{2pt}
+    {\large Software Engineer} \\
+    \vspace{3pt}
+    \small
+    \href{mailto:prathameshbonde32@gmail.com}{prathameshbonde32@gmail.com} \quad | \quad 
+    \href{https://linkedin.com/in/prathameshbonde}{LinkedIn} \quad | \quad 
+    +91 9925937240
+\end{center}
+
+% --- ABOUT ---
+\section{Summary}
+% %START_SUMMARY%
+\textbf{Software Engineer (GenAI \& Enterprise Systems)} with 3 years in industry. Expert in \textbf{LangGraph}, \textbf{Java 17}, and \textbf{OpenShift}, driving \textbf{95\% efficiency gains} by architecting agentic workflows and modernizing legacy financial infrastructure.
+% %END_SUMMARY%
+
+% --- SKILLS ---
+\section{Skills}
+% %START_SKILLS%
+\begin{description}[leftmargin=0pt, itemsep=-2pt, parsep=1pt, topsep=0pt]
+    \item[\textbf{AI \& GenAI:}] Generative AI, LangGraph (Agentic Workflows), RAG, Multi-agent Systems, HITL, Neo4j, Prompt Engineering, GANs.
+    \item[\textbf{Languages \& Backend:}] Java 17, Python, JS/TS, C++, Spring Boot, Node.js, Express.js, FastAPI, GraphQL, IBM MQ.
+    \item[\textbf{Cloud \& DevOps:}] OpenShift (OCP/K8s), PCF, Docker, Git, CI/CD (GitHub Actions, Jenkins, Harness, UCD).
+    \item[\textbf{Databases \& Data:}] Oracle SQL, PostgreSQL, MongoDB, SQL Optimization, Data Aggregation.
+    \item[\textbf{Frontend \& Testing:}] React.js, Next.js, Redux, Jest, React Testing Library, Cucumber (BDD), Selenium.
+    \item[\textbf{Tools:}] IntelliJ IDEA, VS Code, Postman, Yarn/NPM, GitHub Copilot SDK.
+\end{description}
+% %END_SKILLS%
+
+% --- WORK EXPERIENCE ---
+\section{Work Experience}
+
+\noindent
+\textbf{Wells Fargo} \hfill \textbf{Jan 2023 -- Present} \\
+\textit{Software Engineer} \hfill \textit{Bengaluru, India}
+% %START_EXPERIENCE_1%
+\begin{itemize}
+    \item SmartADCC (Automated Claims Decisioning): Engineered \textbf{SmartADCC}, a multi-agent \textbf{LangGraph} solution that automates end-to-end liability decisioning; integrated \textbf{HITL} state management to ensure risk mitigation while reducing agent workload by \textbf{95\%}.
+    \item Business Assurance (Post-Resolution Audit): Developed a \textbf{LangGraph-driven Business Assurance agent} that orchestrates data aggregation across \textbf{Systems of Record (SOR)} to streamline post-payment audits, reducing per-claim processing time by \textbf{60\%}. 
+    \item \textbf{EBSCL (Claims Initiation)}: Architected the expansion of the claims initiation platform by integrating third-party vendor channels \textbf{(OFX and BillPay)} using \textbf{Java 17, Spring Boot, and IBM MQ}; optimized end-to-end flow to improve the claim initiation journey.
+    \item Built \textbf{@TesGen}, a custom GitHub Copilot agent that analyzes \textbf{100\%} of project code context to auto-generate \textbf{Cucumber} automation test feature files, cutting manual test authoring time significantly and improving coverage by \textbf{30\%+}.
+    \item Developed an \textbf{intelligent chatbot} with an agentic backend capable of dynamically routing queries to data sources, enabling real-time responses and improving query resolution efficiency by \textbf{$\sim$35\%}.
+    \item \textbf{STCOM (Claims Middleware)}: Worked with a team of 20+ people; developed \textbf{5+ features}, including cash component identification for reporting and enriching claim data with risk decisioning for model training.
+    \item Led migration of Java 8 legacy web services to \textbf{Java 17 Spring Boot}, boosting performance by \textbf{$\sim$30\%} by leveraging \textbf{PCF}.
+    \item Built a \textbf{ReactJs} frontend providing analytical insights into \textbf{12 apps}, reducing developer debugging time and increasing efficiency.
+    \item Migrated enterprise applications from PCF to \textbf{OpenShift (OCP Kubernetes)}, enhancing scalability and reducing infrastructure costs by \textbf{$\sim$20\%}.
+\end{itemize}
+% %END_EXPERIENCE_1%
+
+\vspace{4pt}
+
+\noindent
+\textbf{Wells Fargo} \hfill \textbf{May 2022 -- July 2022} \\
+\textit{Software Engineer Intern} \hfill \textit{Bengaluru, India}
+\begin{itemize}
+    \item Built a document repository based on \textbf{blockchain} to make the process of \textbf{KYC online and non-repetitive}.
+    \item Developed the frontend on \textbf{React}, backend on \textbf{NodeJS}, used \textbf{MongoDB} and deployed on \textbf{Ropsten testnet} with \textbf{Solidity}.
+\end{itemize}
+
+% --- PROJECTS ---
+\section{Projects (Deep Learning)}
+
+\textbf{Dysarthic Speech Enhancement}
+\begin{itemize}
+    \item Developed a \textbf{GAN model} to enhance dysarthric speech by training the generator with dysarthric speech inputs and normal speech, improving clarity through \textbf{adversarial learning}.
+\end{itemize}
+
+\vspace{3pt}
+
+\textbf{Deep Obfuscator}
+\begin{itemize}
+    \item Designed an \textbf{encoder optimized} for classification tasks while \textbf{minimizing accuracy against adversarial reconstruction} and classification attacks, enhancing model robustness.
+\end{itemize}
+
+% --- EDUCATION ---
+\section{Education}
+
+\noindent
+\textbf{Dhirubhai Ambani University} \hfill \textbf{2019 -- 2023} \\
+\textit{B.Tech in ICT (Minor in Computational Science)} \hfill \textit{Gandhinagar, India}
+\begin{itemize}
+    \item \textbf{CGPA: 8.77}
+\end{itemize}
+
+\end{document}

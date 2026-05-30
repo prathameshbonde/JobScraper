@@ -1,352 +1,201 @@
-"""
-JobScraper — Daily Career Portal Job Scraper
-=============================================
-
-Automates daily scraping of career portals, deduplicates results,
-and sends email notifications with new job listings.
-
-Usage:
-    python main.py --run-now              Run a single scrape cycle
-    python main.py --run-now --headful    Run with visible browser (for debugging)
-    python main.py --run-now --dry-run    Scrape but don't send email
-    python main.py --test-email           Send a test email to verify SMTP config
-    python main.py --setup-auth <portal>  Open browser for manual OAuth login
-    python main.py --scheduler            Start APScheduler for continuous mode
-    python main.py --list-portals         List available portal plugins
-    python main.py --reset-db             Clear the database of all scraped jobs
-"""
-
-import sys
 import os
-import asyncio
-import argparse
-import logging
-from datetime import datetime, timedelta
-from pathlib import Path
-
+import sys
+import json
 import yaml
-from dotenv import load_dotenv
+import time
+from datetime import datetime
 
-# Add project root to Python path
-sys.path.insert(0, str(Path(__file__).parent))
-
-from core.orchestrator import run_scrape
-from core.browser import BrowserManager
-from notifier.email_sender import EmailSender
-from portals.loader import list_available_portals
-
-
-def setup_logging(level: str = "INFO"):
-    """Configure logging with console and file output."""
-    log_dir = Path("logs")
-    log_dir.mkdir(exist_ok=True)
-
-    # Create formatter
-    formatter = logging.Formatter(
-        fmt="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-
-    # Console handler
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(formatter)
-
-    # File handler (rotating by date would be nice, but keep it simple)
-    log_file = log_dir / f"scrape_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-    file_handler = logging.FileHandler(log_file, encoding="utf-8")
-    file_handler.setFormatter(formatter)
-
-    # Root logger
-    root_logger = logging.getLogger()
-    root_logger.setLevel(getattr(logging, level.upper(), logging.INFO))
-    root_logger.addHandler(console_handler)
-    root_logger.addHandler(file_handler)
-
-    return log_file
-
-
-def cleanup_old_logs(days: int = 5):
-    """Delete old scrape log files that are older than the given number of days."""
-    log_dir = Path("logs")
-    if not log_dir.exists():
-        return
-
-    cutoff = datetime.now() - timedelta(days=days)
-    logger = logging.getLogger(__name__)
-    logger.info(f"Cleaning up log files older than {days} days...")
-
-    for path in log_dir.glob("scrape_*.log"):
-        try:
-            if path.is_file():
-                try:
-                    # Extract datetime from filename (scrape_YYYYMMDD_HHMMSS.log)
-                    date_str = path.stem.replace("scrape_", "")
-                    log_date = datetime.strptime(date_str, "%Y%m%d_%H%M%S")
-                except ValueError:
-                    # Fallback to modification time
-                    log_date = datetime.fromtimestamp(path.stat().st_mtime)
-
-                if log_date < cutoff:
-                    path.unlink()
-                    logger.info(f"Deleted old log file: {path.name}")
-        except Exception as e:
-            logger.warning(f"Could not delete old log file '{path.name}': {e}")
-
-
-def load_config(config_path: str = "config.yaml") -> dict:
-    """Load the global configuration file."""
-    path = Path(config_path)
-    if not path.exists():
-        print(f"ERROR: Configuration file not found: {config_path}")
-        print("Create a config.yaml file (see config.yaml.example or README.md)")
-        sys.exit(1)
-
-    with open(path, "r") as f:
-        config = yaml.safe_load(f)
-
-    return config
-
-
-def parse_args():
-    """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(
-        description="JobScraper — Daily Career Portal Job Scraper",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__,
-    )
-
-    # Run modes
-    mode_group = parser.add_argument_group("Run Modes")
-    mode_group.add_argument(
-        "--run-now",
-        action="store_true",
-        help="Execute a single scrape run immediately",
-    )
-    mode_group.add_argument(
-        "--scheduler",
-        action="store_true",
-        help="Start APScheduler for continuous daily runs",
-    )
-    mode_group.add_argument(
-        "--test-email",
-        action="store_true",
-        help="Send a test email to verify SMTP configuration",
-    )
-    mode_group.add_argument(
-        "--setup-auth",
-        type=str,
-        metavar="PORTAL",
-        help="Open headed browser for manual login to a portal",
-    )
-    mode_group.add_argument(
-        "--reset-db",
-        action="store_true",
-        help="Clear the database of all scraped job records",
-    )
-    mode_group.add_argument(
-        "--list-portals",
-        action="store_true",
-        help="List all available portal plugins",
-    )
-
-    # Options
-    options_group = parser.add_argument_group("Options")
-    options_group.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Scrape but don't send email (print results only)",
-    )
-    options_group.add_argument(
-        "--headful",
-        action="store_true",
-        help="Run with visible browser window (overrides config)",
-    )
-    options_group.add_argument(
-        "--config",
-        type=str,
-        default="config.yaml",
-        help="Path to configuration file (default: config.yaml)",
-    )
-
-    return parser.parse_args()
-
-
-async def cmd_run_now(config: dict, dry_run: bool, headful: bool):
-    """Execute a single scrape run."""
-    logger = logging.getLogger(__name__)
-    logger.info("Starting scrape run...")
-    cleanup_old_logs()
-
-    jobs = await run_scrape(config, dry_run=dry_run, headful=headful)
-
-    if jobs:
-        logger.info(f"\nFound {len(jobs)} new jobs:")
-        for job in jobs:
-            logger.info(f"  → {job}")
-    else:
-        logger.info("\nNo new jobs found.")
-
-
-def cmd_test_email(config: dict):
-    """Send a test email."""
-    logger = logging.getLogger(__name__)
-    email_config = config.get("email", {})
-
-    if not email_config:
-        logger.error("No email configuration found in config.yaml")
-        return
-
-    emailer = EmailSender(email_config)
-    emailer.send_test()
-    logger.info("Test email sent! Check your inbox.")
-
-
-async def cmd_setup_auth(config: dict, portal_name: str):
-    """Open a headed browser for manual portal authentication."""
-    logger = logging.getLogger(__name__)
-    logger.info(f"Setting up authentication for portal: {portal_name}")
-
-    browser = BrowserManager(headless=False, timeout=120000)
-    await browser.start()
-
-    context = await browser.get_context(portal_name)
-    page = await context.new_page()
-
-    try:
-        # Dynamically import the portal's login module
-        import importlib
-
-        login_module = importlib.import_module(f"portals.{portal_name}.login")
-        if hasattr(login_module, "setup_auth"):
-            await login_module.setup_auth(page, context, auth_dir="auth")
-        else:
-            logger.error(
-                f"Portal '{portal_name}' does not have a setup_auth function."
-            )
-    except ModuleNotFoundError:
-        logger.error(f"Portal plugin '{portal_name}' not found.")
-    except Exception as e:
-        logger.error(f"Auth setup failed: {e}", exc_info=True)
-    finally:
-        await context.close()
-        await browser.stop()
-
-
-def cmd_scheduler(config: dict, dry_run: bool, headful: bool):
-    """Start APScheduler for continuous daily runs."""
-    logger = logging.getLogger(__name__)
-
-    try:
-        from apscheduler.schedulers.blocking import BlockingScheduler
-        from apscheduler.triggers.cron import CronTrigger
-    except ImportError:
-        logger.error("APScheduler not installed. Run: pip install apscheduler")
-        return
-
-    schedule = config.get("schedule", {})
-    hour = schedule.get("hour", 10)
-    minute = schedule.get("minute", 0)
-
-    scheduler = BlockingScheduler()
-
-    def scheduled_run():
-        """Wrapper to run async scrape from sync scheduler."""
-        cleanup_old_logs()
-        asyncio.run(run_scrape(config, dry_run=dry_run, headful=headful))
-
-    scheduler.add_job(
-        scheduled_run,
-        CronTrigger(hour=hour, minute=minute),
-        id="daily_scrape",
-        name=f"Daily job scrape at {hour:02d}:{minute:02d}",
-    )
-
-    logger.info(f"Scheduler started. Will run daily at {hour:02d}:{minute:02d}")
-    logger.info("Press Ctrl+C to stop.")
-
-    try:
-        scheduler.start()
-    except (KeyboardInterrupt, SystemExit):
-        scheduler.shutdown()
-        logger.info("Scheduler stopped.")
-
-
-def cmd_list_portals():
-    """List available portal plugins."""
-    portals = list_available_portals()
-    if portals:
-        print(f"\nAvailable portal plugins ({len(portals)}):")
-        for name in portals:
-            print(f"  • {name}")
-    else:
-        print("\nNo portal plugins found.")
-    print(f"\nPortal plugins are located in: portals/")
-    print("To add a new portal, create a new folder with login.py, search.py, and scrape.py")
-
-
-def cmd_reset_db(config: dict):
-    """Clear the database."""
-    logger = logging.getLogger(__name__)
-    db_path = config.get("general", {}).get("db_path", "jobs.db")
-    
-    from storage.db import JobDatabase
-    db = JobDatabase(db_path)
-    db.connect()
-    
-    confirm = input(f"Are you sure you want to clear all records from '{db_path}'? (y/N): ")
-    if confirm.lower() == 'y':
-        db.clear()
-        print("Database cleared.")
-    else:
-        print("Operation cancelled.")
-    
-    db.close()
-
-
-def main():
-    """Main entry point."""
-    # Load environment variables
+# Load local environment variables from a .env file if python-dotenv is installed
+try:
+    from dotenv import load_dotenv
     load_dotenv()
+except ImportError:
+    pass
 
-    # Parse arguments
-    args = parse_args()
+from scraper import fetch_and_filter_jobs
+from rewriter import generate_tailored_resume
+from compiler import compile_resume
+from notifier import dispatch_daily_digest
 
-    # Load config
-    config = load_config(args.config)
+def run_pipeline():
+    start_time = time.time()
+    print("======================================================================")
+    print("      STARTING JOB ACQUISITION & AI RESUME TAILORING PIPELINE")
+    print("======================================================================")
+    print(f"[ORCHESTRATOR] [INFO] Pipeline started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # 0. System Pre-flight Verification
+    print("[ORCHESTRATOR] [INFO] Commencing Pre-flight asset verifications...")
+    master_resume_path = "resume.tex"
+    if not os.path.exists(master_resume_path):
+        print(f"[ORCHESTRATOR] [CRITICAL] Baseline master file '{master_resume_path}' was not found in directory.")
+        print("  - Troubleshooting: Please add your master LaTeX resume file 'resume.tex' in the project directory.")
+        sys.exit(1)
+        
+    print(f"[ORCHESTRATOR] [INFO] Master template '{master_resume_path}' found. Loading content...")
+    with open(master_resume_path, "r", encoding="utf-8") as f:
+        master_latex = f.read()
+        
+    print(f"[ORCHESTRATOR] [INFO] Master file loaded successfully. Size: {len(master_latex)} characters.")
+    
+    # Verify marker comments exist to protect compilation safety
+    print("[ORCHESTRATOR] [DEBUG] Verifying comment-tag markers inside resume.tex...")
+    has_summary = "% %START_SUMMARY%" in master_latex and "% %END_SUMMARY%" in master_latex
+    has_experience = "% %START_EXPERIENCE_1%" in master_latex and "% %END_EXPERIENCE_1%" in master_latex
+    print(f"  - SUMMARY markers found: {has_summary}")
+    print(f"  - EXPERIENCE_1 markers found: {has_experience}")
+    if not (has_summary or has_experience):
+        print("[ORCHESTRATOR] [WARNING] No standard tagging comment markers discovered in resume.tex. The pipeline will not be able to customize sections.")
 
-    # Setup logging
-    log_level = config.get("general", {}).get("log_level", "INFO")
-    log_file = setup_logging(log_level)
-
-    logger = logging.getLogger(__name__)
-    logger.info(f"Log file: {log_file}")
-
-    # Route to the appropriate command
-    if args.list_portals:
-        cmd_list_portals()
-
-    elif args.reset_db:
-        cmd_reset_db(config)
-
-    elif args.test_email:
-        cmd_test_email(config)
-
-    elif args.setup_auth:
-        asyncio.run(cmd_setup_auth(config, args.setup_auth))
-
-    elif args.scheduler:
-        cmd_scheduler(config, dry_run=args.dry_run, headful=args.headful)
-
-    elif args.run_now:
-        asyncio.run(cmd_run_now(config, dry_run=args.dry_run, headful=args.headful))
-
+    # 1. Fetch & Filter Job Openings
+    print("[ORCHESTRATOR] [INFO] Launching Scraper Engine...")
+    new_jobs = fetch_and_filter_jobs()
+    if not new_jobs:
+        print("[ORCHESTRATOR] [INFO] No new job listings found today. State is up-to-date. Pipeline execution halted cleanly.")
+        print(f"[ORCHESTRATOR] [INFO] Total Execution Time: {time.time() - start_time:.2f} seconds.")
+        print("======================================================================")
+        return
+        
+    # Load settings config
+    print("[ORCHESTRATOR] [INFO] Parsing config.yaml settings...")
+    with open("config.yaml", "r") as f:
+        config = yaml.safe_load(f)
+        
+    params = config.get("search_parameters", {})
+    gemini_config = config.get("gemini_settings", {})
+    model_name = gemini_config.get("model_name", "gemini-2.0-flash")
+    max_limit = params.get("max_jobs_to_tailor", 5)
+    
+    # Bypassing resume rewriting flag (supports env or config)
+    bypass_rewriting = os.environ.get("BYPASS_REWRITING", "").strip().lower() in ("true", "1", "yes")
+    if not bypass_rewriting:
+        bypass_rewriting = params.get("bypass_rewriting", config.get("bypass_rewriting", False))
+    
+    recipient_email = os.environ.get("RECEIVER_EMAIL")
+    
+    if not recipient_email:
+        print("[ORCHESTRATOR] [WARNING] RECEIVER_EMAIL environment variable is missing.")
+        print("  - Pipeline will run in MOCK email mode (using mock_receiver@example.com). Set RECEIVER_EMAIL in your .env or secrets to receive emails.")
+        recipient_email = "mock_receiver@example.com"
+        
+    print(f"[ORCHESTRATOR] [INFO] Configured run parameters:")
+    print(f"  - Selected Gemini Model: '{model_name}'")
+    print(f"  - New unprocessed jobs found: {len(new_jobs)}")
+    print(f"  - Pipeline processing ceiling limit: {max_limit}")
+    print(f"  - Bypass Resume Rewriting: {bypass_rewriting}")
+    print(f"  - Target notification email: '{recipient_email}'")
+    
+    active_payloads = []
+    processed_this_run = []
+    
+    jobs_to_process = new_jobs[:max_limit]
+    
+    if bypass_rewriting:
+        print(f"[ORCHESTRATOR] [INFO] Bypassing AI tailoring loop. Packing {len(jobs_to_process)} job listings directly...")
+        for idx, job in enumerate(jobs_to_process):
+            job['tailored_latex'] = None
+            job['pdf_path'] = None
+            active_payloads.append(job)
+            processed_this_run.append({
+                "job_key": job["job_key"],
+                "title": job["title"],
+                "company": job["company"],
+                "location": job["location"],
+                "url": job["url"],
+                "processed_at": datetime.now().isoformat()
+            })
     else:
-        print("No run mode specified. Use --help for usage information.")
-        print("\nQuick start:")
-        print("  python main.py --run-now --dry-run    # Test scrape without email")
-        print("  python main.py --run-now              # Full scrape + email")
-        print("  python main.py --test-email           # Verify email config")
-
+        print(f"[ORCHESTRATOR] [INFO] Starting optimization loop for {len(jobs_to_process)} active job matches...")
+        # 2. Iterate, Tailor, and Compile Resumes
+        for idx, job in enumerate(jobs_to_process):
+            print(f"\n[ORCHESTRATOR] [INFO] ==================================================")
+            print(f"[ORCHESTRATOR] [INFO] Match {idx+1}/{len(jobs_to_process)}: '{job['title']}' at '{job['company']}'")
+            print(f"[ORCHESTRATOR] [INFO] Location: '{job['location']}' | URL: '{job['url']}'")
+            print("[ORCHESTRATOR] [INFO] ==================================================")
+            
+            try:
+                # Construction of a secure company name for local file naming
+                safe_company = "".join([c for c in job['company'] if c.isalnum()]).strip()
+                if not safe_company:
+                    safe_company = f"Company_{idx+1}"
+                pdf_filename = f"Resume_{safe_company}.pdf"
+                
+                # Tailor the LaTeX content against job description
+                print(f"[ORCHESTRATOR] [INFO] Invoking AI rewriter for '{job['title']}' using model '{model_name}'...")
+                tailored_latex = generate_tailored_resume(master_latex, job['description'], model_name=model_name)
+                job['tailored_latex'] = tailored_latex
+                
+                # Compile tailored LaTeX into PDF
+                print(f"[ORCHESTRATOR] [INFO] Sending tailored resume code to LaTeX compiler...")
+                compilation_success = compile_resume(tailored_latex, pdf_filename)
+                if compilation_success:
+                    job['pdf_path'] = pdf_filename
+                    print(f"[ORCHESTRATOR] [INFO] PDF compilation successful: '{pdf_filename}' added to attachments.")
+                else:
+                    job['pdf_path'] = None
+                    print("[ORCHESTRATOR] [WARNING] PDF compilation was skipped or failed. Falling back to sending raw LaTeX in email body.")
+                    
+                active_payloads.append(job)
+                
+                # Log state data payload
+                processed_this_run.append({
+                    "job_key": job["job_key"],
+                    "title": job["title"],
+                    "company": job["company"],
+                    "location": job["location"],
+                    "url": job["url"],
+                    "processed_at": datetime.now().isoformat()
+                })
+                
+            except Exception as e:
+                print(f"[ORCHESTRATOR] [ERROR] General exception crashed tailoring loop for '{job['title']}': {e}")
+            
+    # 3. Deliver Digest Notification via SMTP
+    if active_payloads:
+        print(f"\n[ORCHESTRATOR] [INFO] Optimizations completed. Dispatching email digest to '{recipient_email}'...")
+        dispatch_daily_digest(recipient_email, active_payloads, bypass_rewriting=bypass_rewriting)
+        
+        # 4. Merge and Commit State
+        state_file = "processed_jobs.json"
+        print(f"[ORCHESTRATOR] [INFO] Merging {len(processed_this_run)} newly processed listings into state database '{state_file}'...")
+        if os.path.exists(state_file):
+            try:
+                with open(state_file, "r") as f:
+                    state_data = json.load(f)
+            except Exception as e:
+                print(f"[ORCHESTRATOR] [WARNING] State database read error: {e}. Starting with empty array.")
+                state_data = []
+        else:
+            state_data = []
+            
+        state_data.extend(processed_this_run)
+        with open(state_file, "w") as f:
+            json.dump(state_data, f, indent=2)
+        print(f"[ORCHESTRATOR] [INFO] State database successfully updated. Current size: {len(state_data)} items.")
+            
+        # 5. Local Temp Cleanup of compiled PDFs
+        print("[ORCHESTRATOR] [INFO] Running cleanups for temporary local PDF attachments...")
+        for job in active_payloads:
+            pdf_path = job.get('pdf_path')
+            if pdf_path and os.path.exists(pdf_path):
+                try:
+                    os.remove(pdf_path)
+                    print(f"  - Deleted compiled attachment: '{pdf_path}'")
+                except Exception as e:
+                    print(f"  - [WARNING] Failed to delete temporary PDF {pdf_path}: {e}")
+                    
+        total_time = time.time() - start_time
+        print("======================================================================")
+        print("           DAILY AGENT RUN COMPLETED SUCCESSFULLY")
+        print("======================================================================")
+        print(f"  - Processed Matches: {len(processed_this_run)}")
+        print(f"  - Emailed Recipient: '{recipient_email}'")
+        print(f"  - Total Execution Time: {total_time:.2f} seconds")
+        print("======================================================================")
+    else:
+        print("[ORCHESTRATOR] [INFO] No job tailoring operations completed successfully today. Email notification skipped.")
+        print(f"[ORCHESTRATOR] [INFO] Total Execution Time: {time.time() - start_time:.2f} seconds.")
+        print("======================================================================")
 
 if __name__ == "__main__":
-    main()
+    run_pipeline()
