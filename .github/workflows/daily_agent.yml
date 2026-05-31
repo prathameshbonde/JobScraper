@@ -57,4 +57,4 @@ jobs:
         with:
           commit_message: "chore: update processed jobs database [skip ci]"
           file_pattern: "processed_jobs.json"
-          branch: main
+          branch: master
