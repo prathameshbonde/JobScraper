@@ -1,1 +1,274 @@
-[]
+[
+  {
+    "job_key": "linkedin_li-4403561473",
+    "title": "Software Development Engineer II , Amazon Pay",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4403561473",
+    "processed_at": "2026-06-01T01:35:51.639651"
+  },
+  {
+    "job_key": "linkedin_li-4414649303",
+    "title": "Software Engineer II - Python,Microservices,Kafka,Nosql,",
+    "company": "Blue Yonder",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4414649303",
+    "processed_at": "2026-06-01T01:35:51.639660"
+  },
+  {
+    "job_key": "linkedin_li-4371391288",
+    "title": "Backend Engineer (SDE 2)",
+    "company": "Kredivo Group",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4371391288",
+    "processed_at": "2026-06-01T01:35:51.639663"
+  },
+  {
+    "job_key": "linkedin_li-4371398195",
+    "title": "Android Engineer (SDE 2)",
+    "company": "Kredivo Group",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4371398195",
+    "processed_at": "2026-06-01T01:35:51.639665"
+  },
+  {
+    "job_key": "linkedin_li-4421822177",
+    "title": "Software Engineer II",
+    "company": "Microsoft",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4421822177",
+    "processed_at": "2026-06-02T01:34:45.196785"
+  },
+  {
+    "job_key": "linkedin_li-4416391428",
+    "title": "Member of Technical staff 3 [4-6years]-Full stack Development",
+    "company": "Nutanix",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4416391428",
+    "processed_at": "2026-06-02T01:34:45.196794"
+  },
+  {
+    "job_key": "linkedin_li-4422890304",
+    "title": "Member of Technical Staff 3 - DevEx",
+    "company": "Nutanix",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4422890304",
+    "processed_at": "2026-06-02T01:34:45.196797"
+  },
+  {
+    "job_key": "linkedin_li-4422827260",
+    "title": "Software Engineer 2 - iOS",
+    "company": "ALLEN Digital",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4422827260",
+    "processed_at": "2026-06-02T01:34:45.196799"
+  },
+  {
+    "job_key": "linkedin_li-4418728636",
+    "title": "(IND) Software Engineer III",
+    "company": "Walmart Global Tech India",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4418728636",
+    "processed_at": "2026-06-02T01:34:45.196801"
+  },
+  {
+    "job_key": "linkedin_li-4422394786",
+    "title": "ROP-Software engineer II",
+    "company": "Microsoft",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4422394786",
+    "processed_at": "2026-06-03T01:39:48.338337"
+  },
+  {
+    "job_key": "linkedin_li-4422461386",
+    "title": "Software Development Engineer II, Prime Video Sports",
+    "company": "Prime Video & Amazon MGM Studios",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4422461386",
+    "processed_at": "2026-06-03T01:39:48.338347"
+  },
+  {
+    "job_key": "linkedin_li-4278665038",
+    "title": "Software Development Engineer II, CMT Systems",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4278665038",
+    "processed_at": "2026-06-03T01:39:48.338350"
+  },
+  {
+    "job_key": "linkedin_li-4412985419",
+    "title": "Software Engineer III, Google Cloud",
+    "company": "Google",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4412985419",
+    "processed_at": "2026-06-03T01:39:48.338352"
+  },
+  {
+    "job_key": "linkedin_li-4413418847",
+    "title": "Software Development Engineer II, Amazon Payments",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4413418847",
+    "processed_at": "2026-06-03T01:39:48.338354"
+  },
+  {
+    "job_key": "linkedin_li-4422934214",
+    "title": "Software Development Engineer II , Cross Border Haul Team",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4422934214",
+    "processed_at": "2026-06-04T01:40:53.555231"
+  },
+  {
+    "job_key": "linkedin_li-4393230429",
+    "title": "Software Development Engineer II, Appstore",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4393230429",
+    "processed_at": "2026-06-04T01:40:53.555241"
+  },
+  {
+    "job_key": "linkedin_li-4413407970",
+    "title": "SDE II, Selling Partner Financial Tech",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4413407970",
+    "processed_at": "2026-06-04T01:40:53.555243"
+  },
+  {
+    "job_key": "linkedin_li-4420115233",
+    "title": "Software Engineer 2",
+    "company": "PowerSchool",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4420115233",
+    "processed_at": "2026-06-04T01:40:53.555245"
+  },
+  {
+    "job_key": "linkedin_li-4401614127",
+    "title": "Software Engineer III - Java",
+    "company": "Walmart Global Tech India",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4401614127",
+    "processed_at": "2026-06-04T01:40:53.555247"
+  },
+  {
+    "job_key": "linkedin_li-4414246611",
+    "title": "Software Engineer 2",
+    "company": "Rippling",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4414246611",
+    "processed_at": "2026-06-05T01:30:44.185918"
+  },
+  {
+    "job_key": "linkedin_li-4393989224",
+    "title": "Software Development Engineer II , Cross Border Haul Team",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4393989224",
+    "processed_at": "2026-06-05T01:30:44.185926"
+  },
+  {
+    "job_key": "linkedin_li-4393975840",
+    "title": "Software Development Engineer II , Cross Border Haul Team",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4393975840",
+    "processed_at": "2026-06-05T01:30:44.185928"
+  },
+  {
+    "job_key": "linkedin_li-4414592433",
+    "title": "Software Engineer II",
+    "company": "Microsoft",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4414592433",
+    "processed_at": "2026-06-05T01:30:44.185931"
+  },
+  {
+    "job_key": "linkedin_li-4411175399",
+    "title": "Software Development Engineer II",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4411175399",
+    "processed_at": "2026-06-05T01:30:44.185932"
+  },
+  {
+    "job_key": "linkedin_li-4375132322",
+    "title": "Software Development Engineer II, Direct Fulfilment",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4375132322",
+    "processed_at": "2026-06-06T01:25:07.358651"
+  },
+  {
+    "job_key": "linkedin_li-4414936067",
+    "title": "Software Engineer II",
+    "company": "Rippling",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4414936067",
+    "processed_at": "2026-06-06T01:25:07.358663"
+  },
+  {
+    "job_key": "linkedin_li-4320959215",
+    "title": "Software Engineer III, Full Stack, Google Cloud",
+    "company": "Google",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4320959215",
+    "processed_at": "2026-06-06T01:25:07.358665"
+  },
+  {
+    "job_key": "linkedin_li-4414455532",
+    "title": "Member of Technical Staff 2 - Go/Golang Developer (2+yrs-3.5yrs) Bangalore",
+    "company": "Nutanix",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4414455532",
+    "processed_at": "2026-06-06T01:25:07.358667"
+  },
+  {
+    "job_key": "linkedin_li-4417874127",
+    "title": "Member of Technical Staff 4[7-9 years]- Python Automation, Virtualisation/Networking/Storage",
+    "company": "Nutanix",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4417874127",
+    "processed_at": "2026-06-06T01:25:07.358669"
+  },
+  {
+    "job_key": "linkedin_li-4333937994",
+    "title": "Software Development Engineer II , Amazon Pay",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4333937994",
+    "processed_at": "2026-06-07T01:33:47.948121"
+  },
+  {
+    "job_key": "linkedin_li-4367167551",
+    "title": "Software Development Engineer II, FinOps FP&A",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4367167551",
+    "processed_at": "2026-06-07T01:33:47.948129"
+  },
+  {
+    "job_key": "linkedin_li-4424659357",
+    "title": "Member of Technical Staff 4(Core Data Path)",
+    "company": "Nutanix",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4424659357",
+    "processed_at": "2026-06-07T01:33:47.948131"
+  },
+  {
+    "job_key": "linkedin_li-4411586536",
+    "title": "(IND) Software Engineer III",
+    "company": "Walmart Global Tech India",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4411586536",
+    "processed_at": "2026-06-07T01:33:47.948133"
+  },
+  {
+    "job_key": "linkedin_li-4405941852",
+    "title": "Software Engineer III",
+    "company": "PDI Technologies",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4405941852",
+    "processed_at": "2026-06-07T01:33:47.948135"
+  }
+]
