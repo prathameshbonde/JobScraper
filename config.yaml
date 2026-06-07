@@ -25,7 +25,7 @@ search_parameters:
   hours_old: 24
   
   # Maximum number of matched jobs to tailor resumes for and attach to the email per day
-  max_jobs_to_tailor: 5
+  max_jobs_to_tailor: 10
   
   # Bypass resume rewriting entirely and just mail matching job descriptions (can be overridden by environment variable BYPASS_REWRITING=true)
   bypass_rewriting: true
@@ -34,7 +34,6 @@ search_parameters:
   tier_1_companies:
     # --- User Selections ---
     - "Google"
-    - "Amazon"
     - "Microsoft"
     - "Rippling"
     - "Nutanix"
