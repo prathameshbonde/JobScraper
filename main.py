@@ -121,8 +121,12 @@ def run_pipeline():
                 pdf_filename = f"Resume_{safe_company}.pdf"
                 
                 # Tailor the LaTeX content against job description
-                print(f"[ORCHESTRATOR] [INFO] Invoking AI rewriter for '{job['title']}' using model '{model_name}'...")
-                tailored_latex = generate_tailored_resume(master_latex, job['description'], model_name=model_name)
+                if not job.get('description'):
+                    print(f"[ORCHESTRATOR] [WARNING] Empty job description for '{job['title']}'. Skipping AI tailoring (output would be identical to master resume).")
+                    tailored_latex = master_latex
+                else:
+                    print(f"[ORCHESTRATOR] [INFO] Invoking AI rewriter for '{job['title']}' using model '{model_name}'...")
+                    tailored_latex = generate_tailored_resume(master_latex, job['description'], model_name=model_name)
                 job['tailored_latex'] = tailored_latex
                 
                 # Compile tailored LaTeX into PDF

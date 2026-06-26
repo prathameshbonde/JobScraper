@@ -145,7 +145,7 @@ def tailor_section(section_name, section_content, job_description, model_name="g
         model=model_name,
         contents=prompt,
         config=types.GenerateContentConfig(
-            temperature=0.15,
+            temperature=0.4,
             system_instruction=role_instruction
         )
     )

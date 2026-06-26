@@ -71,7 +71,8 @@ def scrape_single_query(title, location, results_wanted, hours_old, country, max
                 location=location,
                 results_wanted=results_wanted,
                 hours_old=hours_old,
-                country_submission=country
+                country_submission=country,
+                linkedin_fetch_description=True
             )
             
             if not df.empty:
@@ -199,8 +200,12 @@ def fetch_and_filter_jobs():
             'company': str(row.get('company', 'N/A')).strip(),
             'location': str(row.get('location', 'N/A')).strip(),
             'url': str(row.get('job_url', '')).strip(),
-            'description': str(row.get('description', '')).strip()
+            'description': str(row.get('description') or '').strip()
         }
+
+        if not job_payload['description'] or job_payload['description'].lower() in ('none', 'nan'):
+            job_payload['description'] = ''
+            print(f"[SCRAPER] [WARNING] No description fetched for '{job_payload['title']}' at '{job_payload['company']}'. AI tailoring will have no JD to work with.")
         
         # Validation checks
         if job_payload['title'] == 'N/A' or not job_payload['url']:

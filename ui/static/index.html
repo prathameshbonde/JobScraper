@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Tailoring Suite</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-wand-magic-sparkles logo-icon"></i>
+                <div class="brand-text">
+                    <h1>Antigravity</h1>
+                    <span>Resume Optimizer</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="workspace">
+                    <i class="fa-solid fa-briefcase"></i> Workspace
+                </button>
+                <button class="nav-item" data-tab="template">
+                    <i class="fa-solid fa-file-code"></i> Master LaTeX
+                </button>
+                <button class="nav-item" data-tab="prompts">
+                    <i class="fa-solid fa-sliders"></i> System Prompts
+                </button>
+                <button class="nav-item" data-tab="logs">
+                    <i class="fa-solid fa-terminal"></i> Console Logs
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">Local Server Connected</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- HEADER -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h2 id="page-title">Ad-Hoc Workspace</h2>
+                    <p id="page-subtitle">Paste a job description to instantly optimize and compile your resume.</p>
+                </div>
+                <div class="model-select-container">
+                    <label for="model-select"><i class="fa-solid fa-brain"></i> AI Engine:</label>
+                    <select id="model-select">
+                        <!-- Populated by JavaScript -->
+                        <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+                    </select>
+                </div>
+            </header>
+
+            <!-- TAB CONTENT: WORKSPACE -->
+            <section id="tab-workspace" class="tab-pane active">
+                <div class="workspace-grid">
+                    <!-- Left Column: Input JD -->
+                    <div class="card workspace-input-card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <i class="fa-solid fa-file-import card-icon"></i>
+                                <h3>Target Job Description</h3>
+                            </div>
+                            <button id="clear-jd-btn" class="btn btn-secondary btn-sm" title="Clear Job Description">
+                                <i class="fa-solid fa-trash-can"></i> Clear
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <textarea id="jd-textarea" placeholder="Paste the job description or role requirements here..."></textarea>
+                            <button id="tailor-btn" class="btn btn-primary btn-lg btn-glow">
+                                <span class="btn-text"><i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> Tailor Resume</span>
+                                <span class="spinner-loader hidden"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Tailoring Output -->
+                    <div class="card workspace-output-card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <i class="fa-solid fa-circle-check card-icon"></i>
+                                <h3>Optimization Output</h3>
+                            </div>
+                            <div class="output-actions hidden" id="output-actions">
+                                <button id="copy-tex-btn" class="btn btn-secondary btn-sm" title="Copy LaTeX Source">
+                                    <i class="fa-solid fa-copy"></i> Copy TeX
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" id="output-body">
+                            <!-- Empty State -->
+                            <div class="empty-state" id="output-empty-state">
+                                <div class="empty-icon-container">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                    <i class="fa-solid fa-gears settings-gear"></i>
+                                </div>
+                                <h4>No optimization has run yet</h4>
+                                <p>Input the target job description on the left and click "Tailor Resume" to customize and compile your resume using Google Gemini.</p>
+                            </div>
+
+                            <!-- Processing State -->
+                            <div class="processing-state hidden" id="output-processing-state">
+                                <div class="nebula-spinner">
+                                    <div class="double-bounce1"></div>
+                                    <div class="double-bounce2"></div>
+                                </div>
+                                <h4>Optimizing with Gemini...</h4>
+                                <p id="processing-step">Analyzing keywords and tailoring resume sections...</p>
+                                <div class="mini-console">
+                                    <pre id="mini-log-pre">Initializing pipeline...</pre>
+                                </div>
+                            </div>
+
+                            <!-- Success Result State -->
+                            <div class="result-state hidden" id="output-result-state">
+                                <div class="compilation-success-banner" id="banner-status">
+                                    <div class="banner-icon-container">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                    </div>
+                                    <div class="banner-text">
+                                        <h4 id="status-title">Resume Customization Complete</h4>
+                                        <p id="status-desc">LaTeX compiled successfully! PDF ready for download.</p>
+                                    </div>
+                                </div>
+
+                                <div class="action-grid">
+                                    <a id="download-pdf-btn" href="#" class="btn btn-primary btn-lg btn-glow" download>
+                                        <i class="fa-solid fa-file-pdf"></i> Download Tailored PDF
+                                    </a>
+                                </div>
+
+                                <div class="latex-preview-container">
+                                    <div class="preview-header">
+                                        <span><i class="fa-solid fa-code"></i> Tailored LaTeX Source</span>
+                                    </div>
+                                    <textarea id="tailored-latex-preview" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB CONTENT: TEMPLATE EDITOR -->
+            <section id="tab-template" class="tab-pane">
+                <div class="card full-height-card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <i class="fa-solid fa-file-code card-icon"></i>
+                            <h3>Master LaTeX Template (resume.tex)</h3>
+                        </div>
+                        <div class="header-actions">
+                            <span class="save-status-msg" id="resume-save-status"></span>
+                            <button id="save-resume-btn" class="btn btn-success">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Template
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body no-padding editor-body">
+                        <div class="editor-instructions">
+                            <i class="fa-solid fa-info-circle"></i> Use comment tags <code>% %START_SUMMARY%</code> / <code>% %END_SUMMARY%</code>, <code>% %START_SKILLS%</code> / <code>% %END_SKILLS%</code>, and <code>% %START_EXPERIENCE_1%</code> / <code>% %END_EXPERIENCE_1%</code> to define which sections the AI will tailor.
+                        </div>
+                        <textarea id="resume-editor" class="code-editor" spellcheck="false" placeholder="Loading resume.tex..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB CONTENT: PROMPT CONTROL -->
+            <section id="tab-prompts" class="tab-pane">
+                <div class="prompts-layout">
+                    <!-- Prompts Nav Sidebar -->
+                    <div class="prompts-nav">
+                        <button class="prompt-nav-item active" data-prompt="summary">
+                            <i class="fa-solid fa-heading"></i> Summary Prompt
+                        </button>
+                        <button class="prompt-nav-item" data-prompt="skills">
+                            <i class="fa-solid fa-list-check"></i> Skills Prompt
+                        </button>
+                        <button class="prompt-nav-item" data-prompt="experience">
+                            <i class="fa-solid fa-briefcase"></i> Experience Prompt
+                        </button>
+                    </div>
+
+                    <!-- Prompt Editor Content -->
+                    <div class="card prompt-editor-card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <i class="fa-solid fa-pen-to-square card-icon"></i>
+                                <h3 id="prompt-editor-title">Summary System Prompt</h3>
+                            </div>
+                            <div class="header-actions">
+                                <span class="save-status-msg" id="prompt-save-status"></span>
+                                <button id="save-prompt-btn" class="btn btn-success">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save Prompt
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body no-padding editor-body">
+                            <textarea id="prompt-editor" class="code-editor" spellcheck="false" placeholder="Loading prompt..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB CONTENT: LOGS -->
+            <section id="tab-logs" class="tab-pane">
+                <div class="card full-height-card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <i class="fa-solid fa-terminal card-icon"></i>
+                            <h3>Pipeline Console Output</h3>
+                        </div>
+                        <button id="clear-logs-btn" class="btn btn-secondary btn-sm">
+                            <i class="fa-solid fa-eraser"></i> Clear Console
+                        </button>
+                    </div>
+                    <div class="card-body console-body">
+                        <pre id="console-logs-pre">[CONSOLE INITIALIZED] Waiting for resume tailoring runs...</pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

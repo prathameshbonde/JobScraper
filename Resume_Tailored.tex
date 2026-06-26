@@ -1,0 +1,123 @@
+\documentclass[10pt,a4paper,sans]{moderncv}
+\usepackage{lmodern}
+
+% ModernCV themes
+\moderncvstyle{banking} 
+\moderncvcolor{burgundy} 
+
+% Required moderncv data to prevent compilation errors
+\name{Prathamesh}{Bonde}
+\title{Software Engineer}
+
+% Adjust page margins - further tightened to ensure single page fit
+\usepackage[scale=0.94, top=0.7cm, bottom=0.7cm, left=1.0cm, right=1.0cm]{geometry}
+\usepackage[english]{babel}
+
+% Set default font to Sans Serif (commented out to avoid fontspec errors if Noto Sans is not installed)
+% \babelfont{rm}{Noto Sans}
+
+% Compressed list spacing
+\usepackage{enumitem}
+\setlist[itemize]{label=-, leftmargin=1.2em, nosep, topsep=1pt, partopsep=0pt, parsep=0pt, itemsep=1pt}
+
+\usepackage{titlesec}
+\usepackage{xcolor}
+
+% Color definitions
+\definecolor{primary}{RGB}{0, 51, 102}
+
+% Compact Section styling - Fixed \titlerule typo
+\titleformat{\section}{\large\bfseries\color{primary}\uppercase}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{8pt}{4pt}
+
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+% --- COMPACT HEADER ---
+% Note: Using manual header to maintain specific layout requested previously
+\begin{center}
+    {\Huge \bfseries \color{primary} PRATHAMESH BONDE} \\
+    \vspace{2pt}
+    {\large Software Engineer} \\
+    \vspace{3pt}
+    \small
+    \href{mailto:prathameshbonde32@gmail.com}{prathameshbonde32@gmail.com} \quad | \quad 
+    \href{https://linkedin.com/in/prathameshbonde}{LinkedIn} \quad | \quad 
+    +91 9925937240
+\end{center}
+
+% --- ABOUT ---
+\section{Summary}
+% %START_SUMMARY%
+\textbf{Backend Engineer (SDE II)} with 3 years of experience designing and implementing \textbf{scalable backend services} for \textbf{fintech platforms}. Expert in \textbf{Java 17} and \textbf{OpenShift}, adept at building \textbf{distributed systems} and \textbf{high-throughput APIs}, evidenced by driving \textbf{95\% efficiency gains} through infrastructure modernization.
+% %END_SUMMARY%
+
+% --- SKILLS ---
+\section{Skills}
+% %START_SKILLS%
+\begin{description}[leftmargin=0pt, itemsep=-2pt, parsep=1pt, topsep=0pt]
+    \item[\textbf{Backend Engineering \& System Design:}] Backend Development, Node.js, Java, Spring Boot, Express.js, FastAPI, RESTful APIs, Microservices, Distributed Systems, Event-Driven Architectures, Scalability, High-throughput APIs, System Design, Data Structures \& Algorithms, Performance Tuning, GraphQL.
+    \item[\textbf{Cloud \& DevOps:}] Cloud Environments, Kubernetes (OpenShift/OCP), Containerization (Docker), CI/CD Pipelines (GitHub Actions, Jenkins, Harness), Git, PCF.
+    \item[\textbf{Databases \& Data:}] SQL Databases, NoSQL Databases, Oracle SQL, PostgreSQL, MongoDB, Neo4j, SQL Optimization, Data Aggregation.
+    \item[\textbf{Messaging \& Caching:}] Messaging Systems (IBM MQ), Caching Systems.
+    \item[\textbf{Languages \& Frameworks:}] Python, JavaScript/TypeScript.
+    \item[\textbf{Tools \& Methodologies:}] IntelliJ IDEA, VS Code, Postman, Yarn/NPM, Cucumber (BDD), Engineering Best Practices.
+\end{description}
+% %END_SKILLS%
+
+% --- WORK EXPERIENCE ---
+\section{Work Experience}
+
+\noindent
+\textbf{Wells Fargo} \hfill \textbf{Jan 2023 -- Present} \\
+\textit{Software Engineer} \hfill \textit{Bengaluru, India}
+% %START_EXPERIENCE_1%
+\begin{itemize}
+    \item Architected and implemented \textbf{Java 17 Spring Boot microservices} for a critical claims initiation platform, integrating \textbf{OFX} and \textbf{BillPay} vendor channels via \textbf{IBM MQ} to support high-throughput API transactions and optimize end-to-end processing within a fintech domain.
+    \item Led the migration of legacy \textbf{Java 8 web services} to modern \textbf{Java 17 Spring Boot microservices} on \textbf{PCF}, significantly boosting system performance by \textbf{$\sim$30\%} and enhancing scalability for enterprise backend applications.
+    \item Drove the migration of critical enterprise applications from PCF to \textbf{OpenShift (OCP Kubernetes)}, enhancing system scalability, reliability, and establishing a robust cloud environment while reducing infrastructure costs by \textbf{$\sim$20\%}.
+    \item Engineered \textbf{SmartADCC}, a complex agentic \textbf{LangGraph} solution (in \textbf{Python}) for automated end-to-end liability decisioning, integrating \textbf{HITL} state management to ensure risk mitigation and reduce agent workload by \textbf{95\%} on a core fintech platform.
+    \item Developed a \textbf{LangGraph-driven Business Assurance agent} (in \textbf{Python}) to orchestrate data aggregation across \textbf{Systems of Record (SOR)}, streamlining post-payment audits and reducing per-claim processing time by \textbf{60\%} through efficient backend data flows.
+    \item Owned the development and implementation of \textbf{5+ features} for the \textbf{STCOM Claims Middleware}, including cash component identification and risk decisioning data enrichment, enhancing backend data processing and API integration capabilities.
+    \item Designed and implemented an \textbf{intelligent chatbot} with a scalable agentic \textbf{backend service} for dynamically routing queries to diverse data sources, enabling real-time responses and improving query resolution efficiency by \textbf{$\sim$35\%}.
+    \item Built \textbf{@TesGen}, a custom \textbf{GitHub Copilot agent} that analyzes \textbf{100\%} of project code context to auto-generate \textbf{Cucumber} automation test feature files, improving test coverage by \textbf{30\%+} and streamlining developer workflows.
+\end{itemize}
+% %END_EXPERIENCE_1%
+
+\vspace{4pt}
+
+\noindent
+\textbf{Wells Fargo} \hfill \textbf{May 2022 -- July 2022} \\
+\textit{Software Engineer Intern} \hfill \textit{Bengaluru, India}
+\begin{itemize}
+    \item Built a document repository based on \textbf{blockchain} to make the process of \textbf{KYC online and non-repetitive}.
+    \item Developed the frontend on \textbf{React}, backend on \textbf{NodeJS}, used \textbf{MongoDB} and deployed on \textbf{Ropsten testnet} with \textbf{Solidity}.
+\end{itemize}
+
+% --- PROJECTS ---
+\section{Projects (Deep Learning)}
+
+\textbf{Dysarthic Speech Enhancement}
+\begin{itemize}
+    \item Developed a \textbf{GAN model} to enhance dysarthric speech by training the generator with dysarthric speech inputs and normal speech, improving clarity through \textbf{adversarial learning}.
+\end{itemize}
+
+\vspace{3pt}
+
+\textbf{Deep Obfuscator}
+\begin{itemize}
+    \item Designed an \textbf{encoder optimized} for classification tasks while \textbf{minimizing accuracy against adversarial reconstruction} and classification attacks, enhancing model robustness.
+\end{itemize}
+
+% --- EDUCATION ---
+\section{Education}
+
+\noindent
+\textbf{Dhirubhai Ambani University} \hfill \textbf{2019 -- 2023} \\
+\textit{B.Tech in ICT (Minor in Computational Science)} \hfill \textit{Gandhinagar, India}
+\begin{itemize}
+    \item \textbf{CGPA: 8.77}
+\end{itemize}
+
+\end{document}
