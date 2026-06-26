@@ -1,4 +1,4 @@
-name: Daily Job Scrape
+name: Daily Portal Job Scrape
 
 on:
   schedule:
