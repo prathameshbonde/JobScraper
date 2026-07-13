@@ -1,9 +1,8 @@
 name: Daily Automated Job Search Engine
 
 on:
-  schedule:
-    # Runs at 6:02 AM IST every day
-    - cron: '32 0 * * *'
+  repository_dispatch:
+    types: [external-cron-trigger]
   workflow_dispatch:
     # Allows you to trigger the pipeline manually on-demand from the GitHub Actions tab
 
