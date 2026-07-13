@@ -1,9 +1,8 @@
 name: Daily Portal Job Scrape
 
 on:
-  schedule:
-    # Runs at 6:02 AM IST every day
-    - cron: '32 0 * * *'
+  repository_dispatch:
+    types: [external-cron-trigger]
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
 permissions:
