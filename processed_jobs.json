@@ -6086,5 +6086,53 @@
     "location": "Bengaluru, Karnataka, India",
     "url": "https://www.linkedin.com/jobs/view/4463121770",
     "processed_at": "2026-09-04T01:37:07.097247"
+  },
+  {
+    "job_key": "linkedin_li-4461986077",
+    "title": "Software Engineer III, Full Stack, FrontRow Database Observability",
+    "company": "Google",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4461986077",
+    "processed_at": "2026-09-05T01:34:53.372804"
+  },
+  {
+    "job_key": "linkedin_li-4463340911",
+    "title": "Software Engineer 2",
+    "company": "Microsoft",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4463340911",
+    "processed_at": "2026-09-05T01:34:53.372816"
+  },
+  {
+    "job_key": "linkedin_li-4462322337",
+    "title": "Software Engineer II, Google Cloud",
+    "company": "Google",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4462322337",
+    "processed_at": "2026-09-05T01:34:53.372818"
+  },
+  {
+    "job_key": "linkedin_li-4463337939",
+    "title": "Software Engineer II",
+    "company": "Microsoft",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4463337939",
+    "processed_at": "2026-09-05T01:34:53.372820"
+  },
+  {
+    "job_key": "linkedin_li-4463312026",
+    "title": "Software Engineer III",
+    "company": "Candescent",
+    "location": "",
+    "url": "https://www.linkedin.com/jobs/view/4463312026",
+    "processed_at": "2026-09-05T01:34:53.372822"
+  },
+  {
+    "job_key": "linkedin_li-4463670619",
+    "title": "Software Development Engineer II, E Reader Software",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4463670619",
+    "processed_at": "2026-09-05T01:34:53.372824"
   }
 ]
