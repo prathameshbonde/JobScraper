@@ -1,0 +1,58 @@
+2026-09-12 01:32:09 [INFO] __main__: Log file: logs/scrape_20260912_013209.log
+2026-09-12 01:32:09 [INFO] __main__: Starting scrape run...
+2026-09-12 01:32:09 [INFO] __main__: Cleaning up log files older than 5 days...
+2026-09-12 01:32:09 [INFO] __main__: Deleted old log file: scrape_20260907_013155.log
+2026-09-12 01:32:09 [INFO] storage.db: Connected to database: jobs.db
+2026-09-12 01:32:09 [INFO] core.browser: Browser launched (headless=True)
+2026-09-12 01:32:09 [INFO] core.orchestrator: 
+============================================================
+2026-09-12 01:32:09 [INFO] core.orchestrator: Scraping portal: microsoft
+2026-09-12 01:32:09 [INFO] core.orchestrator: ============================================================
+2026-09-12 01:32:09 [INFO] portals.loader: Loaded portal-specific config from /home/runner/work/JobScraper/JobScraper/portals/microsoft/config.yaml
+2026-09-12 01:32:09 [INFO] portals.loader: Loaded portal plugin: microsoft
+2026-09-12 01:32:09 [INFO] core.browser: No saved session found for 'microsoft', starting fresh
+2026-09-12 01:32:09 [INFO] core.orchestrator: Portal 'microsoft' does not require auth.
+2026-09-12 01:32:09 [INFO] portals.microsoft.search: Prepared search URL for 'Software Engineer 2' in 'Bangalore': https://microsoft.eightfold.ai/careers?domain=microsoft.com&query=Software+Engineer+2&location=Bangalore&sort_by=timestamp
+2026-09-12 01:32:09 [INFO] portals.microsoft.search: Prepared search URL for 'Software Engineer II' in 'Bangalore': https://microsoft.eightfold.ai/careers?domain=microsoft.com&query=Software+Engineer+II&location=Bangalore&sort_by=timestamp
+2026-09-12 01:32:09 [INFO] portals.microsoft.search: Navigating to: https://microsoft.eightfold.ai/careers?domain=microsoft.com&query=Software+Engineer+2&location=Bangalore&sort_by=timestamp
+2026-09-12 01:32:11 [INFO] portals.microsoft.search: Job cards loaded successfully
+2026-09-12 01:32:11 [INFO] portals.microsoft.scrape: Scraping page 1...
+2026-09-12 01:32:12 [INFO] portals.microsoft.scrape: Found 20 job cards on current page
+2026-09-12 01:32:12 [INFO] portals.microsoft.scrape: Scraping page 2...
+2026-09-12 01:32:13 [INFO] portals.microsoft.scrape: Found 20 job cards on current page
+2026-09-12 01:32:13 [INFO] portals.microsoft.scrape: Scraping page 3...
+2026-09-12 01:32:14 [INFO] portals.microsoft.scrape: Found 20 job cards on current page
+2026-09-12 01:32:14 [INFO] portals.microsoft.scrape: Scraping page 4...
+2026-09-12 01:32:15 [INFO] portals.microsoft.scrape: Found 20 job cards on current page
+2026-09-12 01:32:15 [INFO] portals.microsoft.scrape: Found 1 jobs older than 7 days. Stopping pagination.
+2026-09-12 01:32:15 [INFO] portals.microsoft.scrape: Total jobs scraped from microsoft: 39
+2026-09-12 01:32:15 [INFO] portals.microsoft.search: Navigating to: https://microsoft.eightfold.ai/careers?domain=microsoft.com&query=Software+Engineer+II&location=Bangalore&sort_by=timestamp
+2026-09-12 01:32:16 [INFO] portals.microsoft.search: Job cards loaded successfully
+2026-09-12 01:32:16 [INFO] portals.microsoft.scrape: Scraping page 1...
+2026-09-12 01:32:17 [INFO] portals.microsoft.scrape: Found 20 job cards on current page
+2026-09-12 01:32:17 [INFO] portals.microsoft.scrape: Scraping page 2...
+2026-09-12 01:32:18 [INFO] portals.microsoft.scrape: Found 20 job cards on current page
+2026-09-12 01:32:18 [INFO] portals.microsoft.scrape: Scraping page 3...
+2026-09-12 01:32:19 [INFO] portals.microsoft.scrape: Found 20 job cards on current page
+2026-09-12 01:32:19 [INFO] portals.microsoft.scrape: Scraping page 4...
+2026-09-12 01:32:20 [INFO] portals.microsoft.scrape: Found 20 job cards on current page
+2026-09-12 01:32:20 [INFO] portals.microsoft.scrape: Found 7 jobs older than 7 days. Stopping pagination.
+2026-09-12 01:32:20 [INFO] portals.microsoft.scrape: Total jobs scraped from microsoft: 33
+2026-09-12 01:32:20 [INFO] core.orchestrator: Scraped 39 jobs from 'microsoft'
+2026-09-12 01:32:20 [INFO] core.orchestrator: After title filtering: 6 jobs (from 39 scraped)
+2026-09-12 01:32:20 [INFO] core.orchestrator: New jobs (not previously seen): 2 (out of 6 filtered)
+2026-09-12 01:32:20 [INFO] storage.db: Marked 2 jobs as seen
+2026-09-12 01:32:20 [INFO] core.browser: Browser closed
+2026-09-12 01:32:20 [INFO] core.browser: Playwright stopped
+2026-09-12 01:32:20 [INFO] storage.db: Database connection closed
+2026-09-12 01:32:20 [INFO] core.orchestrator: 
+============================================================
+2026-09-12 01:32:20 [INFO] core.orchestrator: SCRAPE COMPLETE
+2026-09-12 01:32:20 [INFO] core.orchestrator: ============================================================
+2026-09-12 01:32:20 [INFO] core.orchestrator: Total new jobs found: 2
+2026-09-12 01:32:20 [INFO] core.orchestrator: Database stats: {'microsoft': 52, '_total': 52}
+2026-09-12 01:32:22 [INFO] notifier.email_sender: Email sent to ['prathameshbonde32@gmail.com']
+2026-09-12 01:32:22 [INFO] __main__: 
+Found 2 new jobs:
+2026-09-12 01:32:22 [INFO] __main__:   → [microsoft] Software Engineer 2 | India, Karnataka, Bangalore | Posted: Sep 11, 2026
+2026-09-12 01:32:22 [INFO] __main__:   → [microsoft] Software Engineer 2 | India, Karnataka, Bangalore | Posted: Sep 11, 2026
