@@ -47,7 +47,7 @@ jobs:
           SMTP_USER: ${{ secrets.EMAIL_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_SENDER: ${{ secrets.EMAIL_USERNAME }}
-          RECEIVER_EMAIL: ${{ secrets.EMAIL_USERNAME }}
+          RECEIVER_EMAIL: ${{ secrets.EMAIL_USERNAME }},gowtam.rao37@gmail.com
           BYPASS_REWRITING: false
         run: python main.py
 

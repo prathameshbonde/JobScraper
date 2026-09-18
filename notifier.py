@@ -6,11 +6,21 @@ from email.mime.application import MIMEApplication
 
 def dispatch_daily_digest(recipient_email, daily_jobs_list, bypass_rewriting=False):
     print("[NOTIFIER] [INFO] Preparing daily digest email...")
-    
-    if not daily_jobs_list: 
+
+    if not daily_jobs_list:
         print("[NOTIFIER] [WARNING] Daily jobs list is empty. Skipping digest email dispatcher.")
         return
-        
+
+    # Support one or more recipients: a list/tuple, or a comma/semicolon-separated string
+    if isinstance(recipient_email, (list, tuple)):
+        recipient_list = [addr.strip() for addr in recipient_email if addr and addr.strip()]
+    else:
+        recipient_list = [addr.strip() for addr in str(recipient_email).replace(';', ',').split(',') if addr.strip()]
+
+    if not recipient_list:
+        print("[NOTIFIER] [ERROR] No valid recipient email addresses provided. Email dispatch skipped.")
+        return
+
     sender_email = os.environ.get('EMAIL_SENDER')
     smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
     smtp_port_str = os.environ.get('SMTP_PORT', '587')
@@ -26,7 +36,7 @@ def dispatch_daily_digest(recipient_email, daily_jobs_list, bypass_rewriting=Fal
     print(f"  - Sender Email: {sender_email}")
     print(f"  - SMTP User: {smtp_user}")
     print(f"  - SMTP Password configured: {masked_pw != 'None'}")
-    print(f"  - Recipient: {recipient_email}")
+    print(f"  - Recipients: {', '.join(recipient_list)}")
     print(f"  - Jobs to Notify: {len(daily_jobs_list)}")
     
     if not all([sender_email, smtp_user, smtp_password]):
@@ -46,7 +56,7 @@ def dispatch_daily_digest(recipient_email, daily_jobs_list, bypass_rewriting=Fal
     subject_title = "Daily Job Opportunities Digest" if bypass_rewriting else "Daily Tailored Job Opportunities Digest"
     msg['Subject'] = f"{subject_title} ({len(daily_jobs_list)} Matches)"
     msg['From'] = sender_email
-    msg['To'] = recipient_email
+    msg['To'] = ', '.join(recipient_list)
     
     # Premium responsive HTML header and design
     title_text = "Daily Job Opportunities Digest" if bypass_rewriting else "Daily AI Resume Tailoring Digest"
@@ -70,7 +80,7 @@ def dispatch_daily_digest(recipient_email, daily_jobs_list, bypass_rewriting=Fal
                 <!-- MAIN CONTENT AREA -->
                 <div style="padding: 30px 25px;">
                     <p style="font-size: 16px; margin-top: 0; color: #4b5563; margin-bottom: 25px;">
-                        Hello Prathamesh, <br><br>
+                        Hi, <br><br>
                         {greeting_text}
                     </p>
     """
@@ -165,12 +175,12 @@ def dispatch_daily_digest(recipient_email, daily_jobs_list, bypass_rewriting=Fal
         print(f"[NOTIFIER] [INFO] TLS connection activated. Authenticating as user '{smtp_user}'...")
         server.login(smtp_user, smtp_password)
         
-        print(f"[NOTIFIER] [INFO] Authentication successful. Delivering email payload to '{recipient_email}'...")
-        server.sendmail(sender_email, recipient_email, msg.as_string())
-        
+        print(f"[NOTIFIER] [INFO] Authentication successful. Delivering email payload to '{', '.join(recipient_list)}'...")
+        server.sendmail(sender_email, recipient_list, msg.as_string())
+
         print("[NOTIFIER] [INFO] Email sent successfully. Terminating SMTP session...")
         server.quit()
-        print(f"[NOTIFIER] [INFO] Daily digest successfully sent to {recipient_email}. Network session closed cleanly.")
+        print(f"[NOTIFIER] [INFO] Daily digest successfully sent to {', '.join(recipient_list)}. Network session closed cleanly.")
     except Exception as e:
         print(f"[NOTIFIER] [ERROR] Failed to dispatch daily digest email: {e}")
         print("  - Troubleshooting: Verify SMTP login credentials, verify that SMTP server/ports are correct, and verify App Password permissions.")

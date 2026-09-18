@@ -132,7 +132,7 @@ To run the pipeline locally, define the following variables in your terminal or 
 
 ```bash
 export GEMINI_API_KEY="your-google-ai-studio-key"
-export RECEIVER_EMAIL="destination-email@example.com"
+export RECEIVER_EMAIL="destination-email@example.com,another-email@example.com" # comma-separated for multiple recipients
 export EMAIL_SENDER="sender-email@example.com"
 export SMTP_USER="your-smtp-username"
 export SMTP_PASSWORD="your-smtp-app-password"
@@ -159,7 +159,7 @@ python main.py
 | Secret Name | Description | Example / Default |
 | :--- | :--- | :--- |
 | `GEMINI_API_KEY` | Your Google AI Studio API key | `AIzaSy...` |
-| `RECEIVER_EMAIL` | The destination email for digests | `recipient@example.com` |
+| `RECEIVER_EMAIL` | The destination email(s) for digests (comma-separated for multiple recipients) | `recipient@example.com,another@example.com` |
 | `EMAIL_SENDER` | The sending email address | `sender@example.com` |
 | `SMTP_USER` | SMTP authentication username | `sender@example.com` |
 | `SMTP_PASSWORD` | SMTP password / App Password | `abcd efgh ijkl mnop` |
