@@ -2,7 +2,7 @@ name: Daily Portal Job Scrape
 
 on:
   repository_dispatch:
-    types: [external-cron-trigger]
+    types: [external-cron-trigger-disabled]
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
 permissions:
