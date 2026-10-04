@@ -47,13 +47,13 @@ jobs:
           SMTP_USER: ${{ secrets.EMAIL_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_SENDER: ${{ secrets.EMAIL_USERNAME }}
-          RECEIVER_EMAIL: ${{ secrets.EMAIL_USERNAME }},gowtam.rao37@gmail.com
           BYPASS_REWRITING: false
         run: python main.py
 
       - name: Auto-Commit Processed Jobs Database Updates
+        if: always() # Persist state from profiles that succeeded even if another profile failed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update processed jobs database [skip ci]"
-          file_pattern: "processed_jobs.json"
+          file_pattern: "processed_jobs*.json"
           branch: master

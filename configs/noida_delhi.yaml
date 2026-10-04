@@ -1,4 +1,5 @@
-# Configuration file for Daily Automated Job Search and Resume Tailoring Pipeline
+# Profile: Noida/Delhi search, sent to akshat.vora.pro@gmail.com
+# Same as the root config.yaml except for locations, recipients and state_file
 
 search_parameters:
   titles:
@@ -13,8 +14,14 @@ search_parameters:
   
   # Locations to target
   locations:
-    - "Bengaluru"
+    - "Noida"
+    - "Delhi"
     - "Bangalore"
+    - "Bengaluru"
+    - "Gurgaon"
+    - "Gurugram"
+    - "Hyderabad"
+    - "Pune"
   
   # Target country
   country: "india"
@@ -64,11 +71,10 @@ email_settings:
 
   # Who receives this profile's digest (falls back to RECEIVER_EMAIL env var if empty)
   recipients:
-    - "prathameshbonde32@gmail.com"
-    - "gowtam.rao37@gmail.com"
+    - "akshat.vora.pro@gmail.com"
 
 # Deduplication database for this profile (each profile tracks its own sent jobs)
-state_file: "processed_jobs.json"
+state_file: "processed_jobs_noida_delhi.json"
 
 gemini_settings:
   # The Google Gemini AI model to use for tailoring tasks

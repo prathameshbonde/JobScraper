@@ -8,8 +8,8 @@ from datetime import datetime, date
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from jobspy import scrape_jobs
 
-def load_config():
-    with open("config.yaml", "r") as f:
+def load_config(config_path="config.yaml"):
+    with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
 def is_title_match(job_title, configured_titles):
@@ -88,9 +88,10 @@ def scrape_single_query(title, location, results_wanted, hours_old, country, max
                 
     return df
 
-def fetch_and_filter_jobs():
-    print("[SCRAPER] [INFO] Loading configuration from config.yaml...")
-    config = load_config()
+def fetch_and_filter_jobs(config=None, state_file="processed_jobs.json"):
+    if config is None:
+        print("[SCRAPER] [INFO] Loading configuration from config.yaml...")
+        config = load_config()
     params = config.get("search_parameters", {})
     
     titles = params.get("titles", ["Software Engineer"])
@@ -109,7 +110,6 @@ def fetch_and_filter_jobs():
     print(f"  - Tier 1 Companies (High Priority Boost): {tier_1_companies}")
     
     # Load historical processed jobs database
-    state_file = "processed_jobs.json"
     print(f"[SCRAPER] [INFO] Opening state database file: '{state_file}'...")
     if os.path.exists(state_file):
         try:

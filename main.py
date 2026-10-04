@@ -1,8 +1,8 @@
 import os
 import sys
 import json
-import yaml
 import time
+import glob
 from datetime import datetime
 
 # Load local environment variables from a .env file if python-dotenv is installed
@@ -12,17 +12,45 @@ try:
 except ImportError:
     pass
 
-from scraper import fetch_and_filter_jobs
+from scraper import fetch_and_filter_jobs, load_config
 from rewriter import generate_tailored_resume
 from compiler import compile_resume
 from notifier import dispatch_daily_digest
 
-def run_pipeline():
+DEFAULT_CONFIG_PATH = "config.yaml"
+EXTRA_CONFIGS_DIR = "configs"
+
+def discover_config_paths():
+    # The root config.yaml plus every profile in configs/ (one profile per recipient group)
+    paths = []
+    if os.path.exists(DEFAULT_CONFIG_PATH):
+        paths.append(DEFAULT_CONFIG_PATH)
+    for pattern in ("*.yaml", "*.yml"):
+        paths.extend(sorted(glob.glob(os.path.join(EXTRA_CONFIGS_DIR, pattern))))
+    return paths
+
+def resolve_recipients(config):
+    # Recipients configured on the profile take precedence; RECEIVER_EMAIL is the fallback
+    recipients = config.get("email_settings", {}).get("recipients") or []
+    if isinstance(recipients, str):
+        recipients = [recipients]
+    recipients = [r.strip() for r in recipients if r and str(r).strip()]
+    if recipients:
+        return recipients
+    env_recipients = os.environ.get("RECEIVER_EMAIL", "")
+    return [r.strip() for r in env_recipients.replace(';', ',').split(',') if r.strip()]
+
+def run_pipeline(config_path=DEFAULT_CONFIG_PATH):
     start_time = time.time()
     print("======================================================================")
     print("      STARTING JOB ACQUISITION & AI RESUME TAILORING PIPELINE")
     print("======================================================================")
     print(f"[ORCHESTRATOR] [INFO] Pipeline started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"[ORCHESTRATOR] [INFO] Using configuration profile: '{config_path}'")
+
+    config = load_config(config_path)
+    state_file = config.get("state_file", "processed_jobs.json")
+    print(f"[ORCHESTRATOR] [INFO] State database for this profile: '{state_file}'")
     
     # 0. System Pre-flight Verification
     print("[ORCHESTRATOR] [INFO] Commencing Pre-flight asset verifications...")
@@ -49,17 +77,12 @@ def run_pipeline():
 
     # 1. Fetch & Filter Job Openings
     print("[ORCHESTRATOR] [INFO] Launching Scraper Engine...")
-    new_jobs = fetch_and_filter_jobs()
+    new_jobs = fetch_and_filter_jobs(config, state_file=state_file)
     if not new_jobs:
         print("[ORCHESTRATOR] [INFO] No new job listings found today. State is up-to-date. Pipeline execution halted cleanly.")
         print(f"[ORCHESTRATOR] [INFO] Total Execution Time: {time.time() - start_time:.2f} seconds.")
         print("======================================================================")
         return
-        
-    # Load settings config
-    print("[ORCHESTRATOR] [INFO] Parsing config.yaml settings...")
-    with open("config.yaml", "r") as f:
-        config = yaml.safe_load(f)
         
     params = config.get("search_parameters", {})
     gemini_config = config.get("gemini_settings", {})
@@ -71,19 +94,19 @@ def run_pipeline():
     if not bypass_rewriting:
         bypass_rewriting = params.get("bypass_rewriting", config.get("bypass_rewriting", False))
     
-    recipient_email = os.environ.get("RECEIVER_EMAIL")
+    recipient_email = resolve_recipients(config)
     
     if not recipient_email:
-        print("[ORCHESTRATOR] [WARNING] RECEIVER_EMAIL environment variable is missing.")
-        print("  - Pipeline will run in MOCK email mode (using mock_receiver@example.com). Set RECEIVER_EMAIL in your .env or secrets to receive emails.")
-        recipient_email = "mock_receiver@example.com"
+        print(f"[ORCHESTRATOR] [WARNING] No recipients configured in '{config_path}' (email_settings.recipients) and RECEIVER_EMAIL is missing.")
+        print("  - Pipeline will run in MOCK email mode (using mock_receiver@example.com).")
+        recipient_email = ["mock_receiver@example.com"]
         
     print(f"[ORCHESTRATOR] [INFO] Configured run parameters:")
     print(f"  - Selected Gemini Model: '{model_name}'")
     print(f"  - New unprocessed jobs found: {len(new_jobs)}")
     print(f"  - Pipeline processing ceiling limit: {max_limit}")
     print(f"  - Bypass Resume Rewriting: {bypass_rewriting}")
-    print(f"  - Target notification email: '{recipient_email}'")
+    print(f"  - Target notification emails: {recipient_email}")
     
     active_payloads = []
     processed_this_run = []
@@ -160,7 +183,6 @@ def run_pipeline():
         dispatch_daily_digest(recipient_email, active_payloads, bypass_rewriting=bypass_rewriting)
         
         # 4. Merge and Commit State
-        state_file = "processed_jobs.json"
         print(f"[ORCHESTRATOR] [INFO] Merging {len(processed_this_run)} newly processed listings into state database '{state_file}'...")
         if os.path.exists(state_file):
             try:
@@ -202,4 +224,21 @@ def run_pipeline():
         print("======================================================================")
 
 if __name__ == "__main__":
-    run_pipeline()
+    # Usage: python main.py [config1.yaml config2.yaml ...]
+    # With no arguments, runs config.yaml and every profile under configs/.
+    config_paths = sys.argv[1:] or discover_config_paths()
+    if not config_paths:
+        print("[ORCHESTRATOR] [CRITICAL] No configuration files found.")
+        sys.exit(1)
+
+    failed = []
+    for path in config_paths:
+        try:
+            run_pipeline(path)
+        except Exception as e:
+            print(f"[ORCHESTRATOR] [ERROR] Pipeline run for profile '{path}' crashed: {e}")
+            failed.append(path)
+
+    if failed:
+        print(f"[ORCHESTRATOR] [ERROR] Failed profiles: {failed}")
+        sys.exit(1)

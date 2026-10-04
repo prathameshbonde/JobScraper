@@ -73,7 +73,17 @@ search_parameters:
 email_settings:
   smtp_server: "smtp.gmail.com"
   smtp_port: 587
+  recipients:                  # Who receives this profile's digest
+    - "you@example.com"
+
+state_file: "processed_jobs.json"  # Per-profile deduplication database
 ```
+
+### Multiple profiles (one config per recipient group)
+
+Each config file is a self-contained profile with its own search parameters, `email_settings.recipients` and `state_file`. Running `python main.py` with no arguments runs `config.yaml` plus every `*.yaml` file in `configs/`, one after another. Each profile emails only its own recipients and keeps its own state file, so one job can still be sent to two groups if it matches both profiles. To run specific profiles: `python main.py configs/noida_delhi.yaml`.
+
+If a profile has no `recipients`, the `RECEIVER_EMAIL` environment variable is used as a fallback.
 
 ---
 
