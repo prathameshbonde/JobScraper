@@ -270,5 +270,85 @@
     "location": "Bengaluru, Karnataka, India",
     "url": "https://www.linkedin.com/jobs/view/4475789400",
     "processed_at": "2026-10-09T01:34:31.273138"
+  },
+  {
+    "job_key": "linkedin_li-4477673635",
+    "title": "Software Engineer II",
+    "company": "Microsoft",
+    "location": "Hyderabad, Telangana, India",
+    "url": "https://www.linkedin.com/jobs/view/4477673635",
+    "processed_at": "2026-10-10T01:35:08.806292"
+  },
+  {
+    "job_key": "linkedin_li-4477854673",
+    "title": "Software Engineer 2 - Salesforce Developer",
+    "company": "U.S. Bank",
+    "location": "Cincinnati, OH, USA",
+    "url": "https://www.linkedin.com/jobs/view/4477854673",
+    "processed_at": "2026-10-10T01:35:08.806300"
+  },
+  {
+    "job_key": "linkedin_li-4477856479",
+    "title": "Software Engineer 2 - CorePointAI",
+    "company": "U.S. Bank",
+    "location": "Cincinnati, OH, USA",
+    "url": "https://www.linkedin.com/jobs/view/4477856479",
+    "processed_at": "2026-10-10T01:35:08.806303"
+  },
+  {
+    "job_key": "linkedin_li-4477851631",
+    "title": "Software Engineer 2 - Mobile Developer (iOS & Android)",
+    "company": "Elavon",
+    "location": "Cincinnati, OH, USA",
+    "url": "https://www.linkedin.com/jobs/view/4477851631",
+    "processed_at": "2026-10-10T01:35:08.806306"
+  },
+  {
+    "job_key": "linkedin_li-4477655502",
+    "title": "Software Development Engineer II",
+    "company": "Digiaccel Learning",
+    "location": "Gurugram, Haryana, India",
+    "url": "https://www.linkedin.com/jobs/view/4477655502",
+    "processed_at": "2026-10-10T01:35:08.806310"
+  },
+  {
+    "job_key": "linkedin_li-4477845127",
+    "title": "Software Development Engineer II, International Emerging Stores Sub-same Day",
+    "company": "Amazon",
+    "location": "Gurugram, Haryana, India",
+    "url": "https://www.linkedin.com/jobs/view/4477845127",
+    "processed_at": "2026-10-10T01:35:08.806313"
+  },
+  {
+    "job_key": "linkedin_li-4474894964",
+    "title": "Software Development Engineer III | Full stack - Wallet",
+    "company": "HighLevel",
+    "location": "Delhi, Delhi, India",
+    "url": "https://www.linkedin.com/jobs/view/4474894964",
+    "processed_at": "2026-10-10T01:35:08.806316"
+  },
+  {
+    "job_key": "linkedin_li-4475215164",
+    "title": "Software Development Engineer III - Full Stack Development - Ads Manager Team",
+    "company": "HighLevel",
+    "location": "Delhi, Delhi, India",
+    "url": "https://www.linkedin.com/jobs/view/4475215164",
+    "processed_at": "2026-10-10T01:35:08.806318"
+  },
+  {
+    "job_key": "linkedin_li-4476826713",
+    "title": "Software Development Engineer II",
+    "company": "Expedia Group",
+    "location": "Gurgaon, Haryana, India",
+    "url": "https://www.linkedin.com/jobs/view/4476826713",
+    "processed_at": "2026-10-10T01:35:08.806321"
+  },
+  {
+    "job_key": "linkedin_li-4468688444",
+    "title": "Software Development Engineer II, WW Returns and ReCommerce",
+    "company": "Amazon",
+    "location": "Hyderabad, Telangana, India",
+    "url": "https://www.linkedin.com/jobs/view/4468688444",
+    "processed_at": "2026-10-10T01:35:08.806324"
   }
 ]
