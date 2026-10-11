@@ -350,5 +350,85 @@
     "location": "Hyderabad, Telangana, India",
     "url": "https://www.linkedin.com/jobs/view/4468688444",
     "processed_at": "2026-10-10T01:35:08.806324"
+  },
+  {
+    "job_key": "linkedin_li-4469161083",
+    "title": "Software Development Engineer II",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4469161083",
+    "processed_at": "2026-10-11T01:34:23.957274"
+  },
+  {
+    "job_key": "linkedin_li-4476897254",
+    "title": "Software Engineer II",
+    "company": "PDI Technologies",
+    "location": "Hyderabad, Telangana, India",
+    "url": "https://www.linkedin.com/jobs/view/4476897254",
+    "processed_at": "2026-10-11T01:34:23.957281"
+  },
+  {
+    "job_key": "linkedin_li-4469518286",
+    "title": "Software Engineer III - Backend & Cloud Engineering (Python/Golang/Java, AWS, EKS, Terraform)",
+    "company": "JPMorganChase",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4469518286",
+    "processed_at": "2026-10-11T01:34:23.957283"
+  },
+  {
+    "job_key": "linkedin_li-4440220439",
+    "title": "Software Engineer II",
+    "company": "Nordson Corporation",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4440220439",
+    "processed_at": "2026-10-11T01:34:23.957284"
+  },
+  {
+    "job_key": "linkedin_li-4433860604",
+    "title": "AVP iOS Software Development Engineer III - MySynchrony",
+    "company": "Synchrony",
+    "location": "Cincinnati, OH, USA",
+    "url": "https://www.linkedin.com/jobs/view/4433860604",
+    "processed_at": "2026-10-11T01:34:23.957286"
+  },
+  {
+    "job_key": "linkedin_li-4433851881",
+    "title": "AVP iOS Software Development Engineer III - MySynchrony",
+    "company": "Synchrony",
+    "location": "West Chester, OH, USA",
+    "url": "https://www.linkedin.com/jobs/view/4433851881",
+    "processed_at": "2026-10-11T01:34:23.957288"
+  },
+  {
+    "job_key": "linkedin_li-4458934937",
+    "title": "Senior Software Engineer II (Java Microservices)",
+    "company": "Precisely",
+    "location": "Noida, Uttar Pradesh, India",
+    "url": "https://www.linkedin.com/jobs/view/4458934937",
+    "processed_at": "2026-10-11T01:34:23.957298"
+  },
+  {
+    "job_key": "linkedin_li-4437713290",
+    "title": "Software Development Engineer III, Bangalore",
+    "company": "Broccoli AI",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4437713290",
+    "processed_at": "2026-10-11T01:34:23.957301"
+  },
+  {
+    "job_key": "linkedin_li-4477216217",
+    "title": "Software Engineer II",
+    "company": "OpenGov Inc.",
+    "location": "Pune Division, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4477216217",
+    "processed_at": "2026-10-11T01:34:23.957303"
+  },
+  {
+    "job_key": "linkedin_li-4475614722",
+    "title": "Golang Developer (SDE 2)",
+    "company": "ZOOP",
+    "location": "Pune Division, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4475614722",
+    "processed_at": "2026-10-11T01:34:23.957304"
   }
 ]
